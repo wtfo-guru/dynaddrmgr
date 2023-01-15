@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
-version = "0.1.0"
+version = "0.1.0-dev0"
 license = "MIT"
 
 authors = []
@@ -19,8 +19,16 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
+[tool.poetry.scripts]
+dyntmplmgr = "dynaddrmgr.dyntmpls:main"
+dynfwrules = "dynaddrmgr.dynrules:main"
+
 [tool.poetry.dependencies]
 python = "^3.7"
+click = "^8.1.0"
+wheel = "^0.38"
+nslookup = "^1.6.1"
+wtforglib = ">= 0.4.0"
 
 [tool.poetry.group.test.dependencies]
 mypy = "^0.982"
@@ -35,6 +43,7 @@ safety = "^2.3"
 pytest = "^7.1"
 pytest-cov = "^4.0"
 pytest-randomly = "^3.12"
+testfixtures = "^7.0.4"
 
 [tool.poetry.group.docs]
 optional = true

@@ -2,7 +2,7 @@
 Top level module for dynaddrmgr application.
 
 Classes:
-    DynFwMgr
+    DynAddrMgr
 
 Misc variables:
     APPNM
@@ -16,7 +16,7 @@ from wtforglib.scribe import Scribe
 APPNM = "dynaddrmgr"
 
 
-class DynFwMgr(Scribe):
+class DynAddrMgr(Scribe):
     """App class represents the main dynaddrmgr application."""
 
     config: StrAnyDict
@@ -31,7 +31,7 @@ class DynFwMgr(Scribe):
         test: bool,
         verbose: bool,
     ) -> None:
-        """Initialize DynFwMgr application object.
+        """Initialize DynAddrMgr application object.
 
         Parameters
         ----------

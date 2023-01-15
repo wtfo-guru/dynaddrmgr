@@ -8,7 +8,7 @@ from dynaddrmgr import VERSION, dynrules
 
 HELPTXT = """Usage: main [OPTIONS]
 
-  Main function for dynamic firewall manager.
+  Main function for dynamic firewall rule manager.
 
 Options:
   -c, --config TEXT             Specify config file

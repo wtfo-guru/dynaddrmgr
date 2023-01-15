@@ -24,7 +24,7 @@ from click.core import Context
 from wtforglib.supers import requires_super_user
 
 from dynaddrmgr import VERSION
-from dynaddrmgr.app import DynFwMgr
+from dynaddrmgr.app import DynAddrMgr
 from dynaddrmgr.foos import create_handler
 
 CONTEXT_SETTINGS = types.MappingProxyType({"help_option_names": ["-h", "--help"]})
@@ -86,10 +86,10 @@ def main(  # noqa: WPS216
     noop: bool,
     verbose: bool,
 ) -> int:
-    """Main function for dynamic firewall manager."""
+    """Main function for dynamic firewall rule manager."""
     if not test:
         requires_super_user("When --no-test  dynaddrmgr")
-    app = DynFwMgr(config, debug, test, verbose)
+    app = DynAddrMgr(config, debug, test, verbose)
     dynhosts = app.config.get("dynamic_hosts_open_ports")
     if dynhosts is None:
         raise KeyError("dynamic_hosts_open_ports key is required in configuration")
