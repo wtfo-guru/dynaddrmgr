@@ -9,6 +9,7 @@ from typing import List, Optional, Union
 
 from nslookup import DNSresponse
 from wtforglib.kinds import StrAnyDict
+from wtforglib.ipaddress_foos import ipv6_to_netprefix
 
 from dynaddrmgr.rule import FwRule
 
@@ -70,9 +71,10 @@ class DynamicHost(object):
             List of rules
         """
         if not self._rules:
+            prefix_len = 64
             bang_comment = "!!{0}".format(self.name)
             for ipaddr in ips.answer:
-                ipaddr = self._six_to_netprefix(ipaddr)
+                ipaddr = ipv6_to_netprefix(ipaddr, prefix_len)
                 for bport in self.ports_both:
                     self._rules.append(FwRule(bport, "", ipaddr, bang_comment))
                 for tport in self.ports_tcp:
