@@ -9,9 +9,8 @@ Misc variables:
 """
 import re
 import tempfile
-from logging import Logger
 from pathlib import Path
-from typing import Dict, List
+from typing import List
 
 from wtforglib.kinds import StrAnyDict
 
@@ -54,19 +53,22 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
     before: str
     after: str
 
-    def __init__(self, logger: Logger, cfg: StrAnyDict, opts: Dict[str, bool]) -> None:
-        """Initialize UFW handler.
+    def __init__(self, config: StrAnyDict, **kwargs) -> None:
+        """Initialize FirewallHandler.
 
         Parameters
         ----------
-        logger : Logger
-            Application logger.
-        cfg : StrAnyDict
-            Application configuration.
-        opts : Dict[str, bool]
-            Application options.
+        config : str
+            Path to configuration file.
+
+        Keyword arguments
+        -----------------
+        debug : bool
+        noop : bool
+        test : bool
+        verbose : bool
         """
-        super().__init__(logger, cfg, opts)
+        super().__init__(config, **kwargs)
         self.status = ""
         self.before = ""
         self.after = ""

@@ -17,15 +17,15 @@ Misc variables:
 
 import sys
 import types
-from typing import AnyStr, Dict
+from typing import AnyStr
 
 import click
 from click.core import Context
 from wtforglib.supers import requires_super_user
 
 from dynaddrmgr import VERSION
-from dynaddrmgr.app import DynAddrMgr
-from dynaddrmgr.foos import create_handler
+from dynaddrmgr.foos import load_config_file
+from dynaddrmgr.tmplmgr import TemplateManager
 
 CONTEXT_SETTINGS = types.MappingProxyType({"help_option_names": ["-h", "--help"]})
 
@@ -89,17 +89,14 @@ def main(  # noqa: WPS216
     """Main function for dynamic template manager."""
     if not test:
         requires_super_user("When --no-test  dynaddrmgr")
-    app = DynAddrMgr(config, debug, test, verbose)
-    dynhosts = app.config.get("dynamic_hosts_open_ports")
-    if dynhosts is None:
-        raise KeyError("dynamic_hosts_open_ports key is required in configuration")
-    opts: Dict[str, bool] = {}
-    opts["debug"] = debug
-    opts["noop"] = noop
-    opts["test"] = test
-    opts["verbose"] = verbose
-    fw_handler = create_handler(app.logger, app.config, opts)
-    return fw_handler.exec(dynhosts)
+    app = TemplateManager(
+        load_config_file(config),
+        debug=debug,
+        noop=noop,
+        test=test,
+        verbose=verbose,
+    )
+    return app.manage_templates()
 
 
 if __name__ == "__main__":  # pragma no cover

@@ -9,11 +9,11 @@ import subprocess  # noqa: S404
 import tempfile
 from logging import Logger
 from pathlib import Path
-from typing import Dict, List, NoReturn, Tuple, Union
+from typing import List, NoReturn, Tuple, Union
 
-from nslookup import Nslookup
 from wtforglib.kinds import StrAnyDict
 
+from dynaddrmgr.app import DynAddrMgr
 from dynaddrmgr.dynhost import DynamicHost
 from dynaddrmgr.rule import FwRule
 
@@ -42,7 +42,7 @@ class FakedProcessResult(object):
         self.returncode = returncode
 
 
-class FirewallHandler(object):  # noqa: WPS214 WPS230
+class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
     """
     Firewall handler.
 
@@ -55,28 +55,25 @@ class FirewallHandler(object):  # noqa: WPS214 WPS230
     test: bool
     verbose: bool
     dynamic_hosts: List[DynamicHost]
-    dns: Nslookup
     before_rules: List[FwRule]
     new_rules: List[FwRule]
 
-    def __init__(self, logger: Logger, cfg: StrAnyDict, opts: Dict[str, bool]) -> None:
+    def __init__(self, config: StrAnyDict, **kwargs) -> None:
         """Initialize FirewallHandler.
 
         Parameters
         ----------
-        logger : Logger
-            Application logger.
-        cfg : StrAnyDict
-            Application configuration.
-        opts : Dict[str, bool]
-            Application options.
+        config : str
+            Path to configuration file.
+
+        Keyword arguments
+        -----------------
+        debug : bool
+        noop : bool
+        test : bool
+        verbose : bool
         """
-        self.logger = logger
-        self.debug = opts.get("debug", False)
-        self.noop = opts.get("noop", False)
-        self.test = opts.get("test", False)
-        self.verbose = opts.get("verbose", False)
-        self.dns = Nslookup()
+        super().__init__(config, **kwargs)
         self.dynamic_hosts = []
         self.before_rules = []
         self.new_rules = []
@@ -90,7 +87,25 @@ class FirewallHandler(object):  # noqa: WPS214 WPS230
             ),
         )
 
-    def exec(self, dynhosts: List[StrAnyDict]) -> int:
+    def manage_rules(self) -> int:
+        """Manage firewall rules.
+
+        Returns
+        -------
+        int
+            exit_code
+
+        Raises
+        ------
+        KeyError
+            When dynamic_hosts_open_ports not in self.config
+        """
+        dynhosts = self.config.get("dynamic_hosts_open_ports")
+        if dynhosts is None:
+            raise KeyError("dynamic_hosts_open_ports key is required in configuration")
+        return self._exec(dynhosts)
+
+    def _exec(self, dynhosts: List[StrAnyDict]) -> int:
         """
         Run FirewallHandler.
 
@@ -161,12 +176,7 @@ class FirewallHandler(object):  # noqa: WPS214 WPS230
         -------
             int: Exit code.
         """
-        if host.ipv4 and host.ipv6:
-            ips = self.dns.dns_lookup_all(host.name)
-        elif host.ipv4:
-            ips = self.dns.dns_lookup(host.name)
-        elif host.ipv6:
-            ips = self.dns.dns_lookup(host.name)
+        ips = self._lookup_host(host.name, host.ipv4, host.ipv6, host.ipv6net)
         if ips:
             self.new_rules.extend(host.rules(ips))
         else:
