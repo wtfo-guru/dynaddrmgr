@@ -17,7 +17,7 @@ Misc variables:
 
 import sys
 import types
-from typing import AnyStr, Dict
+from typing import AnyStr
 
 import click
 from click.core import Context
