@@ -15,6 +15,7 @@ from wtforglib.kinds import StrAnyDict
 from wtforglib.versionfile import version_file
 
 from dynaddrmgr.app import DynAddrMgr
+from dynaddrmgr.wtforg import verify_directory
 
 TmplVar = Dict[str, Tuple[str, ...]]
 
@@ -255,22 +256,10 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         bool
             True if exists, is directory and is writable.
         """
-        if not pspec.exists():
-            self.logger.error(
-                "Template dest directory '{0}' not found!!".format(str(pspec)),
-            )
-            return False
-        if not pspec.is_dir():
-            self.logger.error(
-                "Template dest directory '{0}' not a directory!!".format(str(pspec)),
-            )
-            return False
-        if access(pspec, W_OK):
-            self.logger.error(
-                "Template dest directory '{0}' not writable!!".format(str(pspec)),
-            )
-            return False
-        return True
+        retval, error_message = verify_directory(pspec)
+        if not retval:
+            self.logger.error(error_message)
+        return retval
 
     def _verify_template_source(self, source: str) -> bool:
         """Verifies the template source.

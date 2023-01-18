@@ -14,6 +14,8 @@ from wtforglib.ipaddress_foos import ipv6_to_netprefix
 from wtforglib.kinds import StrAnyDict
 from wtforglib.scribe import Scribe
 
+from dynaddrmgr.wtforg import is_ipv6_address
+
 APPNM = "dynaddrmgr"
 
 
@@ -41,6 +43,7 @@ class DynAddrMgr(Scribe):
         test : bool
         verbose : bool
         """
+        self.dns = Nslookup()
         self.config = config
         self.debug = kwargs.get("debug", False)
         self.noop = kwargs.get("noop", False)
@@ -64,6 +67,29 @@ class DynAddrMgr(Scribe):
             syslognm=syslognm,
             screen=screen,
         )
+
+    def _six_to_net(self, prefix_len: int, ips: List[str]) -> Tuple[str, ...]:
+        """Return a tuple of ip source where ip addresses are converted to networks.
+
+        Parameters
+        ----------
+        prefix_len : int
+            Prefix length of ipv6 networks
+        ips : List[str]
+            List of IP addresses to convert if needed
+
+        Returns
+        -------
+        Tuple[str, ...]
+            List of converted addresses
+        """
+        converted: List[str] = []
+        for ip in ips:
+            if is_ipv6_address(ip):
+                converted.append(ipv6_to_netprefix(ip, prefix_len))
+            else:
+                converted.append(ip)
+        return tuple(converted)
 
     def _lookup_host(
         self,
@@ -99,8 +125,5 @@ class DynAddrMgr(Scribe):
             ips = self.dns.dns_lookup(name)
         first_set = set(ips.answer)
         if ipv6net and ipv6:
-            second_set: List[str] = []
-            for ip in first_set:
-                second_set.append(ipv6_to_netprefix(ip, ipv6net))
-            return tuple(second_set)
+            return self._six_to_net(ipv6net, list(first_set))
         return tuple(first_set)
