@@ -55,12 +55,20 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
             if not self._template_vars(tmpl_name, tmpl_value, tmpl_var):
                 errors += 1
                 continue
-            errors += self._render_template(
+            changed = self._render_template(
                 tmpl_value.get("src", ""),
                 tmpl_var,
                 tmpl_value.get("dest", ""),
                 tmpl_value.get("backup", 0),
             )
+            if changed:
+                cargs = tmpl_value.get("on_changed_systemctl", [])
+                if cargs:
+                    self.noop = True
+                    cargs.insert(0, "systemctl")
+                    cmdres = self._run_command(tuple(cargs))
+                    if cmdres.returncode:
+                        errors += 1
         return errors
 
     def _verify_config_data(self, tmpl_name: str, tmpl_value: StrAnyDict) -> bool:
@@ -90,7 +98,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         tmpl_var: TmplVar,
         dest: str,
         backup: int,
-    ) -> int:
+    ) -> bool:
         """Render the template to the file system.
 
         Parameters
@@ -116,12 +124,12 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
             suffix=None,
             delete=False,
         )
-        tfile.write(template.render(dynhost_list=tmpl_var))
+        tfile.write(template.render(dynhosts_dict=tmpl_var))
         tfile.close()
-        self._write_output(Path(dest), Path(tfile.name), backup)
-        return 0
+        print(tfile.name)
+        return self._write_output(Path(dest), Path(tfile.name), backup)
 
-    def _write_output(self, dpath: Path, tpath: Path, backup: int) -> None:
+    def _write_output(self, dpath: Path, tpath: Path, backup: int) -> bool:
         """Write output to output file, unlink temporary file.
 
         Parameters
@@ -133,21 +141,24 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         backup : int
             Number of backups to keep if any
         """
+        retval = False
         if dpath.exists():
             diff = filecmp.cmp(dpath, tpath)
             exists = True
         else:
             exists = False
-            diff = True
-        if diff:
+            diff = False
+        if not diff:
             if not self.noop:
                 if exists:
                     self._backup_file(str(dpath), backup)
                     tpath.replace(dpath)
                 else:
                     tpath.rename(dpath)
+                retval = True
         if not self.debug:
             tpath.unlink()
+        return retval
 
     def _backup_file(self, dest: str, backup: int) -> None:
         """Backup the output before replacing.

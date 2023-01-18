@@ -7,7 +7,8 @@ Classes:
 Misc variables:
     APPNM
 """
-from typing import List, Tuple
+import subprocess  # noqa: S404
+from typing import List, Tuple, Union
 
 from nslookup import DNSresponse, Nslookup
 from wtforglib.ipaddress_foos import ipv6_to_netprefix
@@ -17,6 +18,30 @@ from wtforglib.scribe import Scribe
 from dynaddrmgr.wtforg import is_ipv6_address
 
 APPNM = "dynaddrmgr"
+
+
+class FakedProcessResult(object):
+    """Faked process result."""
+
+    stdout: str
+    stderr: str
+    returncode: int
+
+    def __init__(self, stdout: str = "", stderr: str = "", returncode: int = 0) -> None:
+        """Creates a fake process result.
+
+        Parameters
+        ----------
+        stdout : str
+            Fake stdout
+        stderr : str
+            Fake stderr
+        returncode : int
+            Fake returcode
+        """
+        self.stdout = stdout
+        self.stderr = stderr
+        self.returncode = returncode
 
 
 class DynAddrMgr(Scribe):
@@ -127,3 +152,24 @@ class DynAddrMgr(Scribe):
         if ipv6net and ipv6:
             return self._six_to_net(ipv6net, list(first_set))
         return tuple(first_set)
+
+    def _run_command(
+        self,
+        args: Tuple[str, ...],
+        **kwargs,
+    ) -> Union[subprocess.CompletedProcess[str], FakedProcessResult]:
+        """Runs commands specified by args."""
+        always = kwargs.get("always", False)
+        check = kwargs.get("check", True)
+        cmd_str = "{0}".format(" ".join(args))
+        if not always and self.noop:
+            print("noex: {0}".format(cmd_str))
+            return FakedProcessResult()
+        self.logger.info("ex: {0}".format(cmd_str))
+        return subprocess.run(
+            args,
+            check=check,
+            shell=False,
+            capture_output=True,
+            encoding="utf-8",
+        )
