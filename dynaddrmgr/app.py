@@ -11,11 +11,9 @@ import subprocess  # noqa: S404
 from typing import List, Tuple, Union
 
 from nslookup import DNSresponse, Nslookup
-from wtforglib.ipaddress_foos import ipv6_to_netprefix
+from wtforglib.ipaddress_foos import ipv6_to_netprefix, is_ipv6_address
 from wtforglib.kinds import StrAnyDict
 from wtforglib.scribe import Scribe
-
-from dynaddrmgr.wtforg import is_ipv6_address
 
 APPNM = "dynaddrmgr"
 
@@ -147,7 +145,7 @@ class DynAddrMgr(Scribe):
         elif ipv4:
             ips = self.dns.dns_lookup(name)
         elif ipv6:
-            ips = self.dns.dns_lookup(name)
+            ips = self.dns.dns_lookup6(name)
         first_set = set(ips.answer)
         if ipv6net and ipv6:
             return self._six_to_net(ipv6net, list(first_set))
@@ -169,7 +167,7 @@ class DynAddrMgr(Scribe):
         return subprocess.run(
             args,
             check=check,
-            shell=False,
+            shell=False,  # noqa: S603
             capture_output=True,
             encoding="utf-8",
         )

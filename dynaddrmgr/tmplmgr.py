@@ -11,11 +11,13 @@ from tempfile import NamedTemporaryFile
 from typing import Dict, List, Optional, Tuple
 
 from jinja2 import Template
+from wtforglib.files import verify_directory
+from wtforglib.fstats import set_owner_group_perms
 from wtforglib.kinds import StrAnyDict
+from wtforglib.versioned import unlink_path
 from wtforglib.versionfile import version_file
 
 from dynaddrmgr.app import DynAddrMgr
-from dynaddrmgr.wtforg import verify_directory
 
 TmplVar = Dict[str, Tuple[str, ...]]
 
@@ -55,21 +57,45 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
             if not self._template_vars(tmpl_name, tmpl_value, tmpl_var):
                 errors += 1
                 continue
-            changed = self._render_template(
-                tmpl_value.get("src", ""),
-                tmpl_var,
-                tmpl_value.get("dest", ""),
-                tmpl_value.get("backup", 0),
-            )
-            if changed:
-                cargs = tmpl_value.get("on_changed_systemctl", [])
-                if cargs:
-                    self.noop = True
-                    cargs.insert(0, "systemctl")
-                    cmdres = self._run_command(tuple(cargs))
-                    if cmdres.returncode:
-                        errors += 1
+            errors += self._update_template(tmpl_value, tmpl_var)
         return errors
+
+    def _update_template(self, tmpl_value: StrAnyDict, tmpl_var: TmplVar) -> int:
+        """Update the template if necessary.
+
+        Parameters
+        ----------
+        tmpl_value : StrAnyDict
+            Data describing the target file requirements
+        tmpl_var : TmplVar
+            Variables used by the template
+
+        Returns
+        -------
+        int
+            exit status
+        """
+        rtnval = 0
+        dest = tmpl_value.get("dest", "")
+        changed = self._render_template(
+            tmpl_value.get("src", ""),
+            tmpl_var,
+            dest,
+            tmpl_value.get("backup", 0),
+        )
+        if changed:
+            set_owner_group_perms(
+                dest,
+                tmpl_value.get("owner", ""),
+                tmpl_value.get("group", ""),
+                tmpl_value.get("mode", "0640"),
+            )
+            cargs = tmpl_value.get("on_changed", [])
+            if cargs:
+                cmdres = self._run_command(tuple(cargs))
+                if cmdres.returncode:
+                    rtnval = 1
+        return rtnval
 
     def _verify_config_data(self, tmpl_name: str, tmpl_value: StrAnyDict) -> bool:
         """Verifies the configuration.
@@ -124,10 +150,30 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
             suffix=None,
             delete=False,
         )
-        tfile.write(template.render(dynhosts_dict=tmpl_var))
+        white_list = self._get_white_list(tmpl_var)
+        self.logger.debug("dynhosts_dict: {0}".format(tmpl_var))
+        self.logger.debug("whitelist: {0}".format(white_list))
+        tfile.write(template.render(dynhosts_dict=tmpl_var, whitelist=white_list))
         tfile.close()
-        print(tfile.name)
         return self._write_output(Path(dest), Path(tfile.name), backup)
+
+    def _get_white_list(self, tmpl_var: TmplVar) -> Tuple[str, ...]:
+        """Return a unique tuple of ip addresses.
+
+        Parameters
+        ----------
+        tmpl_var : TmplVar
+            Dictionary of hostname/ipaddresses
+
+        Returns
+        -------
+        Tuple[str, ...]
+            Unique tuple of ip addresses
+        """
+        addresses: List[str] = []
+        for _key, addrs in tmpl_var.items():
+            addresses.extend(addrs)
+        return tuple(set(addresses))
 
     def _write_output(self, dpath: Path, tpath: Path, backup: int) -> bool:
         """Write output to output file, unlink temporary file.
@@ -140,6 +186,10 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
             Path to the temporary generated template file
         backup : int
             Number of backups to keep if any
+
+        Returns
+        -------
+        bool : True if target file replaced
         """
         retval = False
         if dpath.exists():
@@ -148,6 +198,9 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         else:
             exists = False
             diff = False
+        self.logger.debug(
+            "dest: {0} exists: {1} diff: {2}".format(str(dpath), exists, diff),
+        )
         if not diff:
             if not self.noop:
                 if exists:
@@ -155,9 +208,10 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
                     tpath.replace(dpath)
                 else:
                     tpath.rename(dpath)
+                self.logger.info("Updated file: {0}".format(str(dpath)))
                 retval = True
         if not self.debug:
-            tpath.unlink()
+            unlink_path(tpath, missing_ok=True)
         return retval
 
     def _backup_file(self, dest: str, backup: int) -> None:

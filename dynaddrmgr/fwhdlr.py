@@ -128,7 +128,7 @@ class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
         self.unhandled("_add_unmatched_rules")
 
     def _save_before_after_rules(self) -> None:
-        """Write rules to /tmp/dwfwmgr."""
+        """Write rules to /tmp/dynaddrmgr."""
         if self.debug:
             bug_dir = Path(tempfile.gettempdir()) / "dynaddrmgr"
             bug_dir.mkdir(mode=0o750, parents=False, exist_ok=True)  # noqa: WPS432

@@ -6,7 +6,7 @@
       "type": "python",
       "request": "launch",
       "module": "dynaddrmgr.dyntmpls",
-      "justMyCode": true,
+      "justMyCode": false,
       "console": "integratedTerminal",
       "args": ["--debug", "--test"]
     }
