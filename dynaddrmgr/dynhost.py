@@ -57,7 +57,7 @@ class DynamicHost(object):
         self._ports_tcp = self._init_tcp(ports.get("tcp"))
         self._ports_udp = self._init_udp(ports.get("udp"))
 
-    def rules(self, ips: Tuple[str, ...]) -> list[FwRule]:
+    def rules(self, ips: Tuple[str, ...]) -> List[FwRule]:
         """Get rules for dynamic host.
 
         Parameters
@@ -67,7 +67,7 @@ class DynamicHost(object):
 
         Returns
         -------
-        list[FwRule]
+        List[FwRule]
             List of rules
         """
         if not self._rules:
