@@ -10,7 +10,7 @@ Misc variables:
 import re
 import tempfile
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 from wtforglib.kinds import StrAnyDict
 
@@ -165,7 +165,7 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
         self.logger.debug("Before rules: {0}".format(len(self.before_rules)))
         return 0
 
-    def _parse_port_protocol(self, field: str) -> tuple[str, str]:
+    def _parse_port_protocol(self, field: str) -> Tuple[str, str]:
         """
         Parse a port/protocol field.
 
