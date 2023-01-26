@@ -1,3 +1,3 @@
 """Top level package for dynaddrmgr."""
 
-VERSION = "0.2.0-dev0"
+VERSION = "0.1.2"
