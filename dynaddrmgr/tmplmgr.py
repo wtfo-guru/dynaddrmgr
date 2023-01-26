@@ -158,7 +158,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         return self._write_output(Path(dest), Path(tfile.name), backup)
 
     def _get_white_list(self, tmpl_var: TmplVar) -> Tuple[str, ...]:
-        """Return a unique tuple of ip addresses.
+        """Return a sorted unique tuple of ip addresses.
 
         Parameters
         ----------
@@ -173,7 +173,9 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         addresses: List[str] = []
         for _key, addrs in tmpl_var.items():
             addresses.extend(addrs)
-        return tuple(set(addresses))
+        unique_addresses = list(set(addresses))
+        unique_addresses.sort()
+        return tuple(unique_addresses)
 
     def _write_output(self, dpath: Path, tpath: Path, backup: int) -> bool:
         """Write output to output file, unlink temporary file.
