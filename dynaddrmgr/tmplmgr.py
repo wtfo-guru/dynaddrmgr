@@ -157,6 +157,23 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         tfile.close()
         return self._write_output(Path(dest), Path(tfile.name), backup)
 
+    def _unique_sorted_list(self, list_param: List[str]) -> Tuple[str, ...]:
+        """Return a sorted unique tuple of strings.
+
+        Parameters
+        ----------
+        list_param : List[str]
+            List of strings to sort.
+
+        Returns
+        -------
+        Tuple[str, ...]
+            Unique, sorted list of strings
+        """
+        unique_sorted = list(set(list_param))
+        unique_sorted.sort()
+        return tuple(unique_sorted)
+
     def _get_white_list(self, tmpl_var: TmplVar) -> Tuple[str, ...]:
         """Return a sorted unique tuple of ip addresses.
 
@@ -173,9 +190,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         addresses: List[str] = []
         for _key, addrs in tmpl_var.items():
             addresses.extend(addrs)
-        unique_addresses = list(set(addresses))
-        unique_addresses.sort()
-        return tuple(unique_addresses)
+        return self._unique_sorted_list(addresses)
 
     def _write_output(self, dpath: Path, tpath: Path, backup: int) -> bool:
         """Write output to output file, unlink temporary file.
@@ -256,12 +271,13 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         for host in hosts:
             name = host.get("name", "")
             if name:
-                tmpl_var[name] = self._lookup_host(
+                unsorted = self._lookup_host(
                     name,
                     host.get("ipv4", True),
                     host.get("ipv6", True),
                     host.get("ipv6net", 0),
                 )
+                tmpl_var[name] = self._unique_sorted_list(list(unsorted))
             else:
                 self.logger.error(
                     "Template {0} hosts name not specified!!".format(tmpl_name),
