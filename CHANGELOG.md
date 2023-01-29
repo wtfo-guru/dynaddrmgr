@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.1.3](https://github.com/wtfo-guru/dynaddrmgr/tree/v0.1.3) (2023-01-28)
+
+[Full Changelog](https://github.com/wtfo-guru/dynaddrmgr/compare/v0.1.2...v0.1.3)
+
+**Merged pull requests:**
+
+- docs: Updated changelog [\#5](https://github.com/wtfo-guru/dynaddrmgr/pull/5) ([qs5779](https://github.com/qs5779))
+- fix: Sort mapping lists too [\#4](https://github.com/wtfo-guru/dynaddrmgr/pull/4) ([qs5779](https://github.com/qs5779))
+
 ## [v0.1.2](https://github.com/wtfo-guru/dynaddrmgr/tree/v0.1.2) (2023-01-26)
 
 [Full Changelog](https://github.com/wtfo-guru/dynaddrmgr/compare/0.1.1...v0.1.2)
