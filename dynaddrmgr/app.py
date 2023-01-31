@@ -82,7 +82,7 @@ class DynAddrMgr(Scribe):
         elif self.verbose:
             level = "info"
         else:
-            level = "warning"
+            level = "warn"
         super().__init__(
             name=APPNM,
             level=level,
