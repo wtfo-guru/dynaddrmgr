@@ -10,6 +10,7 @@ Changelog
 **Merged pull requests:**
 
 
+* docs: Updated changelog `#5 <https://github.com/wtfo-guru/dynaddrmgr/pull/5>`__ (\ `qs5779 <https://github.com/qs5779>`__\ )
 * fix: Sort mapping lists too `#4 <https://github.com/wtfo-guru/dynaddrmgr/pull/4>`__ (\ `qs5779 <https://github.com/qs5779>`__\ )
 
 `v0.1.2 <https://github.com/wtfo-guru/dynaddrmgr/tree/v0.1.2>`__ (2023-01-26)
