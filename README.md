@@ -1,6 +1,6 @@
 # dynaddrmgr
 
-[![Build Status](https://github.com/wtfo-guru/dynaddrmgr/workflows/test/badge.svg?branch=main&event=push)](https://github.com/wtfo-guru/dynaddrmgr/actions?query=workflow%3Atest)
+[![Build Status](https://github.com/wtfo-guru/dynaddrmgr/actions/workflows/test.yml/badge.svg)](https://github.com/wtfo-guru/dynaddrmgr/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/wtfo-guru/dynaddrmgr/branch/main/graph/badge.svg)](https://codecov.io/gh/wtfo-guru/dynaddrmgr)
 [![Python Version](https://img.shields.io/pypi/pyversions/dynaddrmgr.svg)](https://pypi.org/project/dynaddrmgr/)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
