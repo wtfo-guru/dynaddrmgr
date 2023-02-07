@@ -1253,14 +1253,14 @@ test = ["freezegun", "pytest", "pytest-cov", "pytest-datadir", "pytest-socket", 
 
 [[package]]
 name = "nslookup"
-version = "1.6.1"
+version = "1.6.2"
 description = "Sensible high-level DNS lookups in Python, using DNSpython resolver"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "nslookup-1.6.1-py3-none-any.whl", hash = "sha256:25abc2702f75da8a4ed67ef0af9c36442a1bd2b875ba7d4019c2efb53cac972f"},
-    {file = "nslookup-1.6.1.tar.gz", hash = "sha256:49c3b26f665b042ac04f62cf9f47b70b9968a103fa5e438150035ca3e5b9372a"},
+    {file = "nslookup-1.6.2-py3-none-any.whl", hash = "sha256:69f86d08f1d3133c0ce59bc16dfb401dfe44f5fbb4bcb3e083a9bc7da4dab4aa"},
+    {file = "nslookup-1.6.2.tar.gz", hash = "sha256:98e81b294fdd112049d9dc91ae5239d14d1ecd69fc87de46bcb1cf4d5fb4600c"},
 ]
 
 [package.dependencies]
@@ -2244,4 +2244,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "f4f82fe1351585b579259b9583eb3804228f4bf0ea90c67b285249b023a007de"
+content-hash = "c18a48a23b46bfc0e04b452e3cedb767080ca5251f19cd9bd84e01dcd0eeefa0"
