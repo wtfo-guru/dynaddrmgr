@@ -50,6 +50,8 @@ jobs:
 
     # Upload coverage to codecov: https://codecov.io/
     - name: Upload coverage to Codecov
+      env:
+        CODECOV_TOKEN: 13407910-b4da-4f10-9373-effdee42eb3e
       uses: codecov/codecov-action@v3
       with:
         file: ./coverage.xml
