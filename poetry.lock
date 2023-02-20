@@ -2213,17 +2213,18 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [[package]]
 name = "wtforglib"
-version = "0.6.0"
+version = "0.7.0"
 description = "A set of utility functions I use in my various python projects."
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "wtforglib-0.6.0-py3-none-any.whl", hash = "sha256:d4731932250dc9e8a1db00f2197df5d3d851cff180e3d3d430a892ce97064a9f"},
-    {file = "wtforglib-0.6.0.tar.gz", hash = "sha256:d6b2575fd41d71b978615cff50b74a317ac9d977c59c95c85788ea517d1e5c37"},
+    {file = "wtforglib-0.7.0-py3-none-any.whl", hash = "sha256:ee801f587a026f06f8ce6e08d1161dc7365a29ad283fde354450464632e3f766"},
+    {file = "wtforglib-0.7.0.tar.gz", hash = "sha256:4f23ec8fbec0b323df46f76582a545c22aa3069107cdacce3ade036fc05cf3fb"},
 ]
 
 [package.dependencies]
+jinja2 = ">=3.1.2,<4.0.0"
 pyyaml = ">=6.0,<7.0"
 types-pyyaml = ">=6.0.12.2,<7.0.0.0"
 wheel = ">=0.38.0,<0.39.0"
