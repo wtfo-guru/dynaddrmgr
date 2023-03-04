@@ -1,10 +1,16 @@
 SHELL:=/usr/bin/env bash
+
+LCACHE ?= $(shell readlink -f ~/.cache/python-testing/pypoetry)
+PCACHE ?= /home/qs5779/.cache/pypoetry
+PROJECT ?= $(shell git rev-parse --show-toplevel)
 PROJECT_VERSION ?= $(shell grep ^current_version .bumpversion.cfg | awk '{print $$NF'} | tr '-' '.')
 WHEELS ?= /home/jim/dev/ansible/wtfplaybooks/wheels
 
 .PHONY: black mypy lint unit package test publish publish-test vars build chlog
 vars:
 	echo "PROJECT_VERSION: $(PROJECT_VERSION)"
+	@echo "PCACHE: $(PCACHE)"
+	@echo "LCACHE: $(LCACHE)"
 
 black:
 	poetry run isort .
@@ -37,6 +43,19 @@ publish: build
 
 publish-test: test build
 	poetry publish -r test-pypi
+
+.PHONY: work37 work38 work39 work
+work37:
+	docker run --rm -it --volume $(PROJECT):/project/ --volume $(LCACHE):$(PCACHE) qs5779/python-testing:ubuntu20.04-3.7.16 /bin/bash
+
+work38:
+	docker run --rm -it --volume $(PROJECT):/project/ --volume $(LCACHE):$(PCACHE) qs5779/python-testing:ubuntu20.04-3.8.16 /bin/bash
+
+work39:
+	docker run --rm -it --volume $(PROJECT):/project/ --volume $(LCACHE):$(PCACHE) qs5779/python-testing:ubuntu20.04-3.9.14 /bin/bash
+
+work:
+	docker run --rm -it --volume $(PROJECT):/project/ --volume $(LCACHE):$(PCACHE) qs5779/python-testing:$(DISTRO)-$(PYVERS) /bin/bash
 
 chlog:
 	github_changelog_generator -u wtfo-guru -p dynaddrmgr

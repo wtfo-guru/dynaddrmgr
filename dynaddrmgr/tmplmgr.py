@@ -5,6 +5,7 @@ Classes:
     TemplateManager
 """
 import filecmp
+import shutil
 from os import R_OK, W_OK, access
 from pathlib import Path
 from tempfile import NamedTemporaryFile
@@ -224,7 +225,8 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
                     self._backup_file(str(dpath), backup)
                     tpath.replace(dpath)
                 else:
-                    tpath.rename(dpath)
+                    shutil.copy(tpath, dpath)
+                    # tpath.rename(dpath)
                 self.logger.info("Updated file: {0}".format(str(dpath)))
                 retval = True
         if not self.debug:
