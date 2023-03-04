@@ -1,5 +1,25 @@
 # Changelog
 
+## [v0.1.4](https://github.com/wtfo-guru/dynaddrmgr/tree/v0.1.4) (2023-03-04)
+
+[Full Changelog](https://github.com/wtfo-guru/dynaddrmgr/compare/v0.1.3...v0.1.4)
+
+**Merged pull requests:**
+
+- Develop [\#19](https://github.com/wtfo-guru/dynaddrmgr/pull/19) ([qs5779](https://github.com/qs5779))
+- chore\(deps-dev\): bump black from 22.12.0 to 23.1.0 [\#18](https://github.com/wtfo-guru/dynaddrmgr/pull/18) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Develop [\#17](https://github.com/wtfo-guru/dynaddrmgr/pull/17) ([qs5779](https://github.com/qs5779))
+- chore\(deps\): bump wtforglib from 0.7.0 to 0.8.0 [\#16](https://github.com/wtfo-guru/dynaddrmgr/pull/16) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps-dev\): bump mypy from 1.0.0 to 1.0.1 [\#15](https://github.com/wtfo-guru/dynaddrmgr/pull/15) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump wtforglib from 0.6.0 to 0.7.0 [\#14](https://github.com/wtfo-guru/dynaddrmgr/pull/14) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump nslookup from 1.6.2 to 1.7.0 [\#13](https://github.com/wtfo-guru/dynaddrmgr/pull/13) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Develop [\#12](https://github.com/wtfo-guru/dynaddrmgr/pull/12) ([qs5779](https://github.com/qs5779))
+- chore\(deps-dev\): bump testfixtures from 7.0.4 to 7.1.0 [\#11](https://github.com/wtfo-guru/dynaddrmgr/pull/11) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update Dependencies [\#10](https://github.com/wtfo-guru/dynaddrmgr/pull/10) ([qs5779](https://github.com/qs5779))
+- chore\(deps\): bump nslookup from 1.6.1 to 1.6.2 [\#9](https://github.com/wtfo-guru/dynaddrmgr/pull/9) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps-dev\): bump isort from 5.11.4 to 5.11.5 [\#7](https://github.com/wtfo-guru/dynaddrmgr/pull/7) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps-dev\): bump m2r2 from 0.3.3 to 0.3.3.post2 [\#6](https://github.com/wtfo-guru/dynaddrmgr/pull/6) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v0.1.3](https://github.com/wtfo-guru/dynaddrmgr/tree/v0.1.3) (2023-01-28)
 
 [Full Changelog](https://github.com/wtfo-guru/dynaddrmgr/compare/v0.1.2...v0.1.3)
