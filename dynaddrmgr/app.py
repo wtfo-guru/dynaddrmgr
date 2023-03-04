@@ -8,6 +8,7 @@ Misc variables:
     APPNM
 """
 import subprocess  # noqa: S404
+import sys
 from typing import List, Tuple, Union
 
 from nslookup import DNSresponse, Nslookup
@@ -40,6 +41,12 @@ class FakedProcessResult(object):
         self.stdout = stdout
         self.stderr = stderr
         self.returncode = returncode
+
+
+if sys.version_info >= (3, 9):
+    WtfProcessResult = Union[subprocess.CompletedProcess[str], FakedProcessResult]
+else:
+    WtfProcessResult = Union[subprocess.CompletedProcess, FakedProcessResult]
 
 
 class DynAddrMgr(Scribe):
@@ -155,7 +162,7 @@ class DynAddrMgr(Scribe):
         self,
         args: Tuple[str, ...],
         **kwargs,
-    ) -> Union[subprocess.CompletedProcess[str], FakedProcessResult]:
+    ) -> WtfProcessResult:
         """Runs commands specified by args."""
         always = kwargs.get("always", False)
         check = kwargs.get("check", True)
