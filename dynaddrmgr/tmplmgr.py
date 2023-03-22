@@ -188,7 +188,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         Tuple[str, ...]
             Unique tuple of ip addresses
         """
-        addresses: List[str] = []
+        addresses: List[str] = self.config.get("global_whites", [])
         for _key, addrs in tmpl_var.items():
             addresses.extend(addrs)
         return self._unique_sorted_list(addresses)

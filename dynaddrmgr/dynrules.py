@@ -89,7 +89,7 @@ def main(  # noqa: WPS216
     """Main function for dynamic firewall rule manager."""
     if not test:
         requires_super_user("When --no-test  dynaddrmgr")
-    cfg = load_config_file(config)
+    cfg = load_config_file(config, debug)
     fwtype = cfg.get("firewall_handler", "unspecified").lower()
     if fwtype == "ufw":
         app = UfwHandler(cfg, debug=debug, noop=noop, test=test, verbose=verbose)
