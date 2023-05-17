@@ -17,6 +17,7 @@ Misc variables:
 
 import sys
 import types
+from datetime import datetime
 from typing import AnyStr
 
 import click
@@ -96,7 +97,12 @@ def main(  # noqa: WPS216
         test=test,
         verbose=verbose,
     )
-    return app.manage_templates()
+    try:
+        rtn_val = app.manage_templates()
+    except Exception as ex:
+        rtn_val = 1
+        print("{0} - {1}".format(datetime.now(), ex), file=sys.stderr)
+    return rtn_val
 
 
 if __name__ == "__main__":  # pragma no cover
