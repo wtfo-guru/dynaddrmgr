@@ -17,6 +17,7 @@ Misc variables:
 
 import sys
 import types
+from datetime import datetime
 from typing import AnyStr
 
 import click
@@ -91,11 +92,16 @@ def main(  # noqa: WPS216
         requires_super_user("When --no-test  dynaddrmgr")
     cfg = load_config_file(config, debug)
     fwtype = cfg.get("firewall_handler", "unspecified").lower()
-    if fwtype == "ufw":
-        app = UfwHandler(cfg, debug=debug, noop=noop, test=test, verbose=verbose)
-    else:
-        raise ValueError("firewall {0} is not supported".format(fwtype))
-    return app.manage_rules()
+    try:
+        if fwtype == "ufw":
+            app = UfwHandler(cfg, debug=debug, noop=noop, test=test, verbose=verbose)
+        else:
+            raise ValueError("firewall {0} is not supported".format(fwtype))
+        rtn_val = app.manage_rules()
+    except Exception as ex:
+        rtn_val = 1
+        print("{0} - {1}".format(datetime.now(), ex), file=sys.stderr)
+    return rtn_val
 
 
 if __name__ == "__main__":  # pragma no cover
