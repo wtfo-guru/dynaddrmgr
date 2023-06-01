@@ -17,7 +17,6 @@ Misc variables:
 
 import sys
 import types
-from datetime import datetime
 from typing import AnyStr
 
 import click
@@ -101,7 +100,7 @@ def main(  # noqa: WPS216
         rtn_val = app.manage_templates()
     except Exception as ex:
         rtn_val = 1
-        print("{0} - {1}".format(datetime.now(), ex), file=sys.stderr)
+        app.logger.error(str(ex))
     return rtn_val
 
 
