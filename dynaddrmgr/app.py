@@ -11,6 +11,7 @@ import subprocess  # noqa: S404
 import sys
 from typing import List, Tuple, Union
 
+from dns.exception import DNSException
 from nslookup import DNSresponse, Nslookup
 from wtforglib.ipaddress_foos import ipv6_to_netprefix, is_ipv6_address
 from wtforglib.kinds import StrAnyDict
@@ -121,7 +122,7 @@ class DynAddrMgr(Scribe):
                 converted.append(ip)
         return tuple(converted)
 
-    def _lookup_host(
+    def _lookup_host(  # noqa: WPS231
         self,
         name: str,
         ipv4: bool,
@@ -145,6 +146,11 @@ class DynAddrMgr(Scribe):
         -------
         Tuple[str, ...]
             Unique list of IP source strings
+
+        Raises
+        ------
+        DNSException
+            If lookup failed
         """
         ips: DNSresponse
         if ipv4 and ipv6:
@@ -153,10 +159,14 @@ class DynAddrMgr(Scribe):
             ips = self.dns.dns_lookup(name)
         elif ipv6:
             ips = self.dns.dns_lookup6(name)
-        first_set = set(ips.answer)
-        if ipv6net and ipv6:
-            return self._six_to_net(ipv6net, list(first_set))
-        return tuple(first_set)
+        if ips.answer:
+            first_set = set(ips.answer)
+            if ipv6net and ipv6:
+                return self._six_to_net(ipv6net, list(first_set))
+            return tuple(first_set)
+        raise DNSException(  # type: ignore [no-untyped-call]
+            "'{0}' name not found.!!!".format(name),
+        )
 
     def _run_command(
         self,
