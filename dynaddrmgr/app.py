@@ -122,7 +122,53 @@ class DynAddrMgr(Scribe):
                 converted.append(ip)
         return tuple(converted)
 
-    def _lookup_host(  # noqa: WPS231
+    def _verify_lookup_answer(  # noqa: WPS211
+        self,
+        name: str,
+        answer: List[str],
+        ipv6: bool,
+        ipv6net: int = 0,
+        minlen: int = 1,
+    ) -> Tuple[str, ...]:
+        """Retrun a unique list of IP source strings.
+
+        Parameters
+        ----------
+        name : str
+            Name of host looked up
+        answer : List[str}
+            List of ip address strings
+        ipv6 : bool
+            Lookup ipv6 flag
+        ipv6net : int
+            Prefix length if ipv6 addreses represent networks
+        minlen : int
+            Minimum number of addresses to accept
+
+        Returns
+        -------
+        Tuple[str, ...]
+            Unique list of IP source strings
+
+        Raises
+        ------
+        DNSException
+            If lookup failed
+        """
+        if answer:
+            if len(answer) >= minlen:
+                first_set = set(answer)
+                if ipv6 and ipv6net:
+                    return self._six_to_net(ipv6net, list(first_set))
+                return tuple(first_set)
+            raise DNSException(  # type: ignore [no-untyped-call]
+                "'{0}' name expected {1} addresses.!!!".format(name, minlen),
+            )
+        raise DNSException(  # type: ignore [no-untyped-call]
+            "'{0}' name not found.!!!".format(name),
+        )
+
+    def _lookup_host(
         self,
         name: str,
         ipv4: bool,
@@ -146,27 +192,17 @@ class DynAddrMgr(Scribe):
         -------
         Tuple[str, ...]
             Unique list of IP source strings
-
-        Raises
-        ------
-        DNSException
-            If lookup failed
         """
         ips: DNSresponse
+        minlen: int = 1
         if ipv4 and ipv6:
             ips = self.dns.dns_lookup_all(name)
+            minlen = 2
         elif ipv4:
             ips = self.dns.dns_lookup(name)
         elif ipv6:
             ips = self.dns.dns_lookup6(name)
-        if ips.answer:
-            first_set = set(ips.answer)
-            if ipv6net and ipv6:
-                return self._six_to_net(ipv6net, list(first_set))
-            return tuple(first_set)
-        raise DNSException(  # type: ignore [no-untyped-call]
-            "'{0}' name not found.!!!".format(name),
-        )
+        return self._verify_lookup_answer(name, ips.answer, ipv6, ipv6net, minlen)
 
     def _run_command(
         self,
