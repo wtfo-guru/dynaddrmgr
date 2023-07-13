@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
-version = "0.5.3-dev0"
+version = "0.5.3-dev1"
 license = "MIT"
 
 authors = [
