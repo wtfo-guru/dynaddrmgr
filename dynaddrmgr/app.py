@@ -99,7 +99,12 @@ class DynAddrMgr(Scribe):
             screen=screen,
         )
 
-    def _six_to_net(self, prefix_len: int, ips: List[str], ipv6net_style = "standard") -> Tuple[str, ...]:
+    def _six_to_net(
+        self,
+        prefix_len: int,
+        ips: List[str],
+        ipv6net_style="standard",
+    ) -> Tuple[str, ...]:
         """Return a tuple of ip source where ip addresses are converted to networks.
 
         Parameters
@@ -173,7 +178,7 @@ class DynAddrMgr(Scribe):
             "'{0}' name not found.!!!".format(name),
         )
 
-    def _lookup_host(
+    def _lookup_host(  # noqa: WPS211
         self,
         name: str,
         ipv4: bool,
@@ -210,7 +215,14 @@ class DynAddrMgr(Scribe):
             ips = self.dns.dns_lookup(name)
         elif ipv6:
             ips = self.dns.dns_lookup6(name)
-        return self._verify_lookup_answer(name, ips.answer, ipv6, ipv6net, minlen, ipv6net_style)
+        return self._verify_lookup_answer(
+            name,
+            ips.answer,
+            ipv6,
+            ipv6net,
+            minlen,
+            ipv6net_style,
+        )
 
     def _run_command(
         self,

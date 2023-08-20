@@ -2066,19 +2066,19 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [[package]]
 name = "wtforglib"
-version = "0.8.2"
+version = "0.8.3"
 description = "A set of utility functions I use in my various python projects."
 optional = false
-python-versions = ">=3.7,<4.0"
+python-versions = ">=3.8,<4.0"
 files = [
-    {file = "wtforglib-0.8.2-py3-none-any.whl", hash = "sha256:16853b6d39a1ac7c0a867c2ee3fad45c93ed25edf477ec671847d251f977f1eb"},
-    {file = "wtforglib-0.8.2.tar.gz", hash = "sha256:c1abe4b9fec785190e548ca143fab557279242257fc463f366827285907eaf09"},
+    {file = "wtforglib-0.8.3-py3-none-any.whl", hash = "sha256:0200a85b470681d67160a9cb5bdcc0615ae0d6f933a881f08975f592a1f71308"},
+    {file = "wtforglib-0.8.3.tar.gz", hash = "sha256:081d8dacd5b125fddc67bbd0eb93c80fbf877bb13981432fe952503d2528f922"},
 ]
 
 [package.dependencies]
 jinja2 = ">=3.1.2,<4.0.0"
 pyyaml = ">=6.0,<7.0"
-types-pyyaml = ">=6.0.12.2,<7.0.0.0"
+types-pyyaml = ">=6.0.12,<7.0.0"
 wheel = ">=0.37.1"
 
 [[package]]
@@ -2099,4 +2099,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"
-content-hash = "6936d6aa7025d91a6b89caa6dbe017fdd4c30b7a2ff321bc64df7c1ab660ba33"
+content-hash = "e64f479cf965e596edb55944676a79077a3075584e6a449605c0e2a700a3054c"
