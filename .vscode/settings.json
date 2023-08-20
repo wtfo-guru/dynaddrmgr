@@ -1,5 +1,7 @@
 {
+    "python.pythonPath": "${workspaceFolder}/.venv/bin/python",
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.analysis.extraPaths": [".venv"],
     "python.testing.pytestArgs": [
         "--override-ini",
         "addopts=--verbose -vv tests"

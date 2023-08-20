@@ -99,7 +99,12 @@ class DynAddrMgr(Scribe):
             screen=screen,
         )
 
-    def _six_to_net(self, prefix_len: int, ips: List[str]) -> Tuple[str, ...]:
+    def _six_to_net(
+        self,
+        prefix_len: int,
+        ips: List[str],
+        ipv6net_style="standard",
+    ) -> Tuple[str, ...]:
         """Return a tuple of ip source where ip addresses are converted to networks.
 
         Parameters
@@ -108,6 +113,8 @@ class DynAddrMgr(Scribe):
             Prefix length of ipv6 networks
         ips : List[str]
             List of IP addresses to convert if needed
+        ipv6net_style : string
+            One of standard, postfix
 
         Returns
         -------
@@ -117,7 +124,7 @@ class DynAddrMgr(Scribe):
         converted: List[str] = []
         for ip in ips:
             if is_ipv6_address(ip):
-                converted.append(ipv6_to_netprefix(ip, prefix_len))
+                converted.append(ipv6_to_netprefix(ip, prefix_len, ipv6net_style))
             else:
                 converted.append(ip)
         return tuple(converted)
@@ -129,6 +136,7 @@ class DynAddrMgr(Scribe):
         ipv6: bool,
         ipv6net: int = 0,
         minlen: int = 1,
+        ipv6net_style: str = "standard",
     ) -> Tuple[str, ...]:
         """Retrun a unique list of IP source strings.
 
@@ -144,6 +152,8 @@ class DynAddrMgr(Scribe):
             Prefix length if ipv6 addreses represent networks
         minlen : int
             Minimum number of addresses to accept
+        ipv6net_style : string
+            One of standard, postfix
 
         Returns
         -------
@@ -159,7 +169,7 @@ class DynAddrMgr(Scribe):
             if len(answer) >= minlen:
                 first_set = set(answer)
                 if ipv6 and ipv6net:
-                    return self._six_to_net(ipv6net, list(first_set))
+                    return self._six_to_net(ipv6net, list(first_set), ipv6net_style)
                 return tuple(first_set)
             raise DNSException(  # type: ignore [no-untyped-call]
                 "'{0}' name expected {1} addresses.!!!".format(name, minlen),
@@ -168,12 +178,13 @@ class DynAddrMgr(Scribe):
             "'{0}' name not found.!!!".format(name),
         )
 
-    def _lookup_host(
+    def _lookup_host(  # noqa: WPS211
         self,
         name: str,
         ipv4: bool,
         ipv6: bool,
         ipv6net: int = 0,
+        ipv6net_style: str = "standard",
     ) -> Tuple[str, ...]:
         """Retrun a unique list of IP source strings.
 
@@ -187,6 +198,8 @@ class DynAddrMgr(Scribe):
             Lookup ipv6 flag
         ipv6net : int
             Prefix length if ipv6 addreses represent networks
+        ipv6net_style : string
+            One of standard, postfix
 
         Returns
         -------
@@ -202,7 +215,14 @@ class DynAddrMgr(Scribe):
             ips = self.dns.dns_lookup(name)
         elif ipv6:
             ips = self.dns.dns_lookup6(name)
-        return self._verify_lookup_answer(name, ips.answer, ipv6, ipv6net, minlen)
+        return self._verify_lookup_answer(
+            name,
+            ips.answer,
+            ipv6,
+            ipv6net,
+            minlen,
+            ipv6net_style,
+        )
 
     def _run_command(
         self,
