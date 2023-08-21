@@ -4,7 +4,7 @@ LCACHE ?= $(shell readlink -f ~/.cache/python-testing/pypoetry)
 PCACHE ?= /home/qs5779/.cache/pypoetry
 PROJECT ?= $(shell git rev-parse --show-toplevel)
 PROJECT_VERSION ?= $(shell grep ^current_version .bumpversion.cfg | awk '{print $$NF'} | tr '-' '.')
-WHEELS ?= /home/jim/dev/ansible/wtfplaybooks/wheels
+WHEELS ?= /home/jim/kbfs/private/jim5779/wheels
 
 .PHONY: black mypy lint unit package test publish publish-test vars build chlog
 vars:
