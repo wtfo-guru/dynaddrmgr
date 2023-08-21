@@ -105,6 +105,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         """Lookup ip sources for template hosts."""
         hosts: List[StrAnyDict] = tmpl_value.get("hosts", {})
         for host in hosts:
+            self.logger.debug("host: {0}".format(host))
             name = host.get("name", "")
             if name:
                 unsorted = self._lookup_host(
@@ -112,7 +113,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
                     host.get("ipv4", True),
                     host.get("ipv6", True),
                     host.get("ipv6net", 0),
-                    host.get("ipv4net_style", "standard"),
+                    host.get("ipv6net_style", "standard"),
                 )
                 tmpl_var[name] = self._unique_sorted_list(list(unsorted))
             else:
