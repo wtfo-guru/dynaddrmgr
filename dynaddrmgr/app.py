@@ -144,7 +144,7 @@ class DynAddrMgr(Scribe):
         ----------
         name : str
             Name of host looked up
-        answer : List[str}
+        answer : List[str]
             List of ip address strings
         ipv6 : bool
             Lookup ipv6 flag
