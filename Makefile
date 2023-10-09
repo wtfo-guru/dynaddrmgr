@@ -67,4 +67,3 @@ chlog:
 
 .DEFAULT:
 	@cd docs && $(MAKE) $@
-

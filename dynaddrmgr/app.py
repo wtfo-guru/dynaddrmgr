@@ -144,7 +144,7 @@ class DynAddrMgr(Scribe):
         ----------
         name : str
             Name of host looked up
-        answer : List[str}
+        answer : List[str]
             List of ip address strings
         ipv6 : bool
             Lookup ipv6 flag
@@ -208,6 +208,7 @@ class DynAddrMgr(Scribe):
         """
         ips: DNSresponse
         minlen: int = 1
+        self.logger.debug("ipv6net_style: {0}".format(ipv6net_style))
         if ipv4 and ipv6:
             ips = self.dns.dns_lookup_all(name)
             minlen = 2
