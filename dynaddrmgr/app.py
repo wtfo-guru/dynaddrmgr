@@ -8,7 +8,6 @@ Misc variables:
     APPNM
 """
 import subprocess  # noqa: S404
-import sys
 from typing import List, Tuple, Union
 
 from dns.exception import DNSException
@@ -44,10 +43,7 @@ class FakedProcessResult(object):
         self.returncode = returncode
 
 
-if sys.version_info >= (3, 9):
-    WtfProcessResult = Union[subprocess.CompletedProcess[str], FakedProcessResult]
-else:
-    WtfProcessResult = Union[subprocess.CompletedProcess, FakedProcessResult]
+WtfProcessResult = Union[subprocess.CompletedProcess[str], FakedProcessResult]
 
 
 class DynAddrMgr(Scribe):
