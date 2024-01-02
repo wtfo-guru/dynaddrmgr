@@ -34,6 +34,7 @@ package:
 test: lint package unit
 
 build: test
+	manage-tag.sh -u v$(PROJECT_VERSION)
 	poetry build
 	cp dist/dynaddrmgr-$(PROJECT_VERSION)-py3-none-any.whl $(WHEELS)
 	sync-wheels
