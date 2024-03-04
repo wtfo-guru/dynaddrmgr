@@ -6,7 +6,11 @@ PROJECT ?= $(shell git rev-parse --show-toplevel)
 PROJECT_VERSION ?= $(shell grep ^current_version .bumpversion.cfg | awk '{print $$NF'} | tr '-' '.')
 WHEELS ?= /home/jim/kbfs/private/jim5779/wheels
 
-.PHONY: black mypy lint unit package test publish publish-test vars build chlog
+.PHONY: black mypy lint unit package test publish publish-test vars build chlog update
+
+update:
+	poetry install --with docs --with test
+
 vars:
 	echo "PROJECT_VERSION: $(PROJECT_VERSION)"
 	@echo "PCACHE: $(PCACHE)"
