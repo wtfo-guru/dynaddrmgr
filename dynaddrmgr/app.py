@@ -19,7 +19,7 @@ from wtforglib.scribe import Scribe
 APPNM = "dynaddrmgr"
 
 
-class FakedProcessResult(object):
+class FakedProcessResult:
     """Faked process result."""
 
     stdout: str
