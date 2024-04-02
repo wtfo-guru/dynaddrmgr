@@ -5,6 +5,7 @@ Classes:
     FakedProcessResult
     FirewallHandler
 """
+
 import tempfile
 from logging import Logger
 from pathlib import Path

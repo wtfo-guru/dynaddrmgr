@@ -20,7 +20,7 @@ from typing import Optional, Union
 from dynaddrmgr.kinds import IPSource
 
 
-class FwRule(object):
+class FwRule:
     """FwRule represents a firewall rule."""
 
     index: int

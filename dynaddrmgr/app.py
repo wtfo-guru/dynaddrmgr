@@ -7,6 +7,7 @@ Classes:
 Misc variables:
     APPNM
 """
+
 import subprocess  # noqa: S404
 from typing import List, Tuple, Union
 
@@ -19,7 +20,7 @@ from wtforglib.scribe import Scribe
 APPNM = "dynaddrmgr"
 
 
-class FakedProcessResult(object):
+class FakedProcessResult:
     """Faked process result."""
 
     stdout: str

@@ -26,7 +26,7 @@ PortList = List[int]
 CfgPortList = List[Union[str, int]]
 
 
-class DynamicHost(object):
+class DynamicHost:
     """DynamicHost is a wrapper for the dynamic host."""
 
     name: str
