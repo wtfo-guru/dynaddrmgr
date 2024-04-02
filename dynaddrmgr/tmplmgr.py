@@ -4,6 +4,7 @@ Top level module for dynaddrmgr application.
 Classes:
     TemplateManager
 """
+
 from typing import Dict, List, Optional, Tuple
 
 from wtforglib.kinds import StrAnyDict

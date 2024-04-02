@@ -7,6 +7,7 @@ Classes:
 Misc variables:
     APPNM
 """
+
 import subprocess  # noqa: S404
 from typing import List, Tuple, Union
 
