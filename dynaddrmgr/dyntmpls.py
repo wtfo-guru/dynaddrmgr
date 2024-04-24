@@ -90,7 +90,7 @@ def main(  # noqa: WPS216
     if not test:
         requires_super_user("When --no-test  dynaddrmgr")
     app = TemplateManager(
-        load_config_file(config, debug),
+        load_config_file(config, "dynaddrmgr", debug),
         debug=debug,
         noop=noop,
         test=test,
