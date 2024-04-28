@@ -4,7 +4,7 @@ PROJECT_NAME ?= $(shell basename $$(git rev-parse --show-toplevel) | sed -e "s/^
 PACKAGE_DIR ?= $(shell echo $(PROJECT_NAME) | tr "-" "_")
 PROJECT_VERSION ?= $(shell grep ^current_version .bumpversion.cfg | awk '{print $$NF'} | tr '-' '.')
 WHEELS ?= /home/jim/kbfs/private/jim5779/wheels
-TEST_MASK = tests/*.py
+TEST_MASK = tests
 GITHUB_ORG ?= wtf-guru
 
 .PHONY: vars black mypy lint sunit unit package test publish publish-test update
