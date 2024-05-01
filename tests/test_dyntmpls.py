@@ -21,7 +21,7 @@ Options:
 """
 
 
-@pytest.fixture()
+@pytest.fixture
 def runner():
     """Fixture to create a test runner."""
     return CliRunner()
