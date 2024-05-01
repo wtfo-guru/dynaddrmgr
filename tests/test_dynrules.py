@@ -40,7 +40,7 @@ TSTATUS = """Status: active
 """  # noqa: E501
 
 
-@pytest.fixture()
+@pytest.fixture
 def runner():
     """Fixture to create a test runner."""
     return CliRunner()
