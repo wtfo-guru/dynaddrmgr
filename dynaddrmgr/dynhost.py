@@ -12,17 +12,20 @@ from wtforglib.kinds import StrAnyDict
 from dynaddrmgr.rule import FwRule
 
 EXAMPLES = """
-#   - name: dynpr.wtforg.net
-#     ipv4: true
-#     ipv6: true
-#     ports:
-#       tcp:
-#         - 22
-#         - 3306
-#         - 33060
-#         - 5432
+  - name: dynpr.wtforg.net
+    ipv4: true
+    ipv6: true
+    ports:
+      tcp:
+        - 22
+        - 3306
+        - 33060
+        - 5432
+      app:
+        - DNS
 """
 PortList = List[int]
+AppList = List[str]
 CfgPortList = List[Union[str, int]]
 
 
@@ -36,6 +39,7 @@ class DynamicHost:
     _ports_both: PortList
     _ports_tcp: PortList
     _ports_udp: PortList
+    _apps: AppList
     _rules: List[FwRule]
     fw_handler: object
 
@@ -56,8 +60,9 @@ class DynamicHost:
         self._ports_both = self._init_both(ports.get("both"))
         self._ports_tcp = self._init_tcp(ports.get("tcp"))
         self._ports_udp = self._init_udp(ports.get("udp"))
+        self._apps = ports.get("app", [])
 
-    def rules(self, ips: Tuple[str, ...]) -> List[FwRule]:
+    def rules(self, ips: Tuple[str, ...]) -> List[FwRule]:  # noqa: C901,WPS210,WPS231
         """Get rules for dynamic host.
 
         Parameters
@@ -79,6 +84,8 @@ class DynamicHost:
                     self._rules.append(FwRule(tport, "tcp", ipaddr, bang_comment))
                 for uport in self._ports_udp:
                     self._rules.append(FwRule(uport, "udp", ipaddr, bang_comment))
+                for app in self._apps:
+                    self._rules.append(FwRule(app, "app", ipaddr, bang_comment))
         return self._rules
 
     def _init_both(self, ports: Optional[CfgPortList]) -> PortList:

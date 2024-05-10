@@ -15,6 +15,7 @@ from typing import List, Tuple
 
 from wtforglib.kinds import StrAnyDict
 
+from dynaddrmgr.app import WtfProcessResult
 from dynaddrmgr.fwhdlr import FirewallHandler
 from dynaddrmgr.rule import FwRule
 
@@ -204,6 +205,79 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
                 errors += 1
         return errors
 
+    def _run_app_command(self, rule: FwRule) -> WtfProcessResult:
+        """Run app command.
+
+        Parameters
+        ----------
+        rule : FwRule
+            The rule to run
+
+        Returns
+        -------
+        WtfProcessResult
+            The result of the command
+        """
+        return self._run_command(
+            (
+                UFW,
+                "allow",
+                "from",
+                str(rule.ipaddr),
+                "to",
+                "any",
+                "app",
+                str(rule.port_or_app),
+                "comment",
+                rule.comment,
+            ),
+        )
+
+    def _run_port_command(self, rule: FwRule) -> WtfProcessResult:
+        """Run port command.
+
+        Parameters
+        ----------
+        rule : FwRule
+            The rule to run
+
+        Returns
+        -------
+        WtfProcessResult
+            The result of the command
+        """
+        if rule.protocol:
+            return self._run_command(
+                (
+                    UFW,
+                    "allow",
+                    "from",
+                    str(rule.ipaddr),
+                    "to",
+                    "any",
+                    "port",
+                    str(rule.port_or_app),
+                    "proto",
+                    rule.protocol,
+                    "comment",
+                    rule.comment,
+                ),
+            )
+        return self._run_command(
+            (
+                UFW,
+                "allow",
+                "from",
+                str(rule.ipaddr),
+                "to",
+                "any",
+                "port",
+                str(rule.port_or_app),
+                "comment",
+                rule.comment,
+            ),
+        )
+
     def _add_unmatched_rules(self) -> int:
         """Add unmatched rules."""
         errors = 0
@@ -213,37 +287,10 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
             if rule.protocol:
                 # ufw allow from 174.24.93.102 to any port 33060 proto tcp
                 # comment '33060/tcp cosprings.teknofile.net'
-                cmd_result = self._run_command(
-                    (
-                        UFW,
-                        "allow",
-                        "from",
-                        str(rule.ipaddr),
-                        "to",
-                        "any",
-                        "port",
-                        str(rule.port),
-                        "proto",
-                        rule.protocol,
-                        "comment",
-                        rule.comment,
-                    ),
-                )
-            else:
-                cmd_result = self._run_command(
-                    (
-                        UFW,
-                        "allow",
-                        "from",
-                        str(rule.ipaddr),
-                        "to",
-                        "any",
-                        "port",
-                        str(rule.port),
-                        "comment",
-                        rule.comment,
-                    ),
-                )
+                if rule.protocol == "app":
+                    cmd_result = self._run_app_command(rule)
+                else:
+                    cmd_result = self._run_port_command(rule)
             if cmd_result.returncode != 0:
                 errors += 1
         return errors
