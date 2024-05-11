@@ -16,6 +16,7 @@ Misc variables:
 """
 
 import sys
+import traceback
 import types
 from datetime import datetime
 from typing import AnyStr
@@ -101,6 +102,11 @@ def main(  # noqa: WPS216
     except Exception as ex:
         rtn_val = 1
         print("{0} - {1}".format(datetime.now(), ex), file=sys.stderr)
+        if debug:
+            print("-" * 60)
+            traceback.print_exc(file=sys.stdout)
+            print("-" * 60)
+
     return rtn_val
 
 

@@ -11,16 +11,21 @@
     "cSpell.words": [
         "bport",
         "brule",
+        "cosprings",
         "dynaddrmgr",
         "dynhosts",
         "dynpr",
+        "dynrules",
         "fbefore",
         "fwhdlr",
         "fwtype",
+        "HELPTXT",
         "hinfo",
         "ipaddr",
         "iport",
+        "teknofile",
         "tport",
+        "TSTATUS",
         "uport"
     ]
 }

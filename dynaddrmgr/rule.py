@@ -24,7 +24,7 @@ class FwRule:
     """FwRule represents a firewall rule."""
 
     index: int
-    port_or_app: Union[str, int]
+    allow: Union[str, int]
     protocol: str
     ipaddr: IPSource
     comment: str
@@ -32,7 +32,7 @@ class FwRule:
 
     def __init__(  # noqa: WPS211
         self,
-        port_or_app: Union[str, int],
+        allow: Union[str, int],
         proto: str,
         ipaddr: str,
         comment: str,
@@ -42,7 +42,7 @@ class FwRule:
 
         Parameters
         ----------
-        port_or_app : Union[str, int]
+        allow : Union[str, int]
             Port number or app
         proto : str
             Protocol
@@ -54,18 +54,21 @@ class FwRule:
             status index number
         """
         self.protocol = proto
-        if proto != "app":
-            self.port_or_app = int(port_or_app)
+        if proto == "app":
+            self.allow = allow
+        else:
+            self.allow = int(allow)
+
         self.ipaddr = self.ip_source(ipaddr)
         if comment.startswith("!!"):
             if proto:
                 comment = "{0}/{1}-{2} (dynaddrmgr)".format(
-                    port_or_app,
+                    allow,
                     proto,
                     comment[2:],
                 )
             else:
-                comment = "{0}-{1} (dynaddrmgr)".format(port_or_app, comment[2:])
+                comment = "{0}-{1} (dynaddrmgr)".format(allow, comment[2:])
         self.comment = comment
         self.index = int(index)
         self.status = 0
@@ -81,7 +84,7 @@ class FwRule:
         if self.protocol:
             return "[%2s] %5s/%s %-40s # %s [%d]" % (  # noqa: WPS323
                 str(self.index),
-                str(self.port_or_app),
+                str(self.allow),
                 self.protocol,
                 str(self.ipaddr),
                 self.comment,
@@ -89,7 +92,7 @@ class FwRule:
             )
         return "[%2s] %5s %-45s # %s [%d]" % (  # noqa: WPS323
             str(self.index),
-            str(self.port_or_app),
+            str(self.allow),
             str(self.ipaddr),
             self.comment,
             self.status,
@@ -118,7 +121,7 @@ class FwRule:
             raise ValueError("Can only compare FwRule instances.")
         if self.ipaddr != other.ipaddr:
             return False
-        if self.port_or_app != other.port_or_app:
+        if self.allow != other.allow:
             return False
         if self.protocol != other.protocol:
             return False
