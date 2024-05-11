@@ -24,7 +24,7 @@ class FwRule:
     """FwRule represents a firewall rule."""
 
     index: int
-    port: int
+    allow: Union[str, int]
     protocol: str
     ipaddr: IPSource
     comment: str
@@ -32,7 +32,7 @@ class FwRule:
 
     def __init__(  # noqa: WPS211
         self,
-        port: Union[str, int],
+        allow: Union[str, int],
         proto: str,
         ipaddr: str,
         comment: str,
@@ -42,10 +42,10 @@ class FwRule:
 
         Parameters
         ----------
-        port : Union[str, int]
-            Port number
+        allow : Union[str, int]
+            Port number or app
         proto : str
-            Protocal
+            Protocol
         ipaddr : str
             IP address
         comment : str
@@ -53,14 +53,22 @@ class FwRule:
         index : str
             status index number
         """
-        self.port = int(port)
         self.protocol = proto
+        if proto == "app":
+            self.allow = allow
+        else:
+            self.allow = int(allow)
+
         self.ipaddr = self.ip_source(ipaddr)
         if comment.startswith("!!"):
             if proto:
-                comment = "{0}/{1}-{2} (dynaddrmgr)".format(port, proto, comment[2:])
+                comment = "{0}/{1}-{2} (dynaddrmgr)".format(
+                    allow,
+                    proto,
+                    comment[2:],
+                )
             else:
-                comment = "{0}-{1} (dynaddrmgr)".format(port, comment[2:])
+                comment = "{0}-{1} (dynaddrmgr)".format(allow, comment[2:])
         self.comment = comment
         self.index = int(index)
         self.status = 0
@@ -76,7 +84,7 @@ class FwRule:
         if self.protocol:
             return "[%2s] %5s/%s %-40s # %s [%d]" % (  # noqa: WPS323
                 str(self.index),
-                str(self.port),
+                str(self.allow),
                 self.protocol,
                 str(self.ipaddr),
                 self.comment,
@@ -84,7 +92,7 @@ class FwRule:
             )
         return "[%2s] %5s %-45s # %s [%d]" % (  # noqa: WPS323
             str(self.index),
-            str(self.port),
+            str(self.allow),
             str(self.ipaddr),
             self.comment,
             self.status,
@@ -113,7 +121,7 @@ class FwRule:
             raise ValueError("Can only compare FwRule instances.")
         if self.ipaddr != other.ipaddr:
             return False
-        if self.port != other.port:
+        if self.allow != other.allow:
             return False
         if self.protocol != other.protocol:
             return False
