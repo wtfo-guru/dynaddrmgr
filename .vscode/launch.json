@@ -2,13 +2,24 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Module",
-      "type": "python",
+      "name": "Python: Module dynrules",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "dynaddrmgr.dynrules",
+      "justMyCode": false,
+      "sudo": true,
+      "console": "integratedTerminal",
+      "args": ["--debug", "-c", "/home/jim/.config/dynaddrmgr.yaml"]
+    },
+    {
+      "name": "Python: Module dyntmpls",
+      "type": "debugpy",
       "request": "launch",
       "module": "dynaddrmgr.dyntmpls",
       "justMyCode": false,
-      "console": "integratedTerminal",
-      "args": ["--debug", "--test"]
+      "sudo": true,
+      "console": "externalTerminal",
+      "args": ["--debug", "--test", "-c", "/home/jim/.config/dynaddrmgr.yaml"]
     }
   ]
 }
