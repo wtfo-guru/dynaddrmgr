@@ -1,27 +1,44 @@
 # Changelog
 
-## [latest](https://github.com/wtfo-guru/dynaddrmgr/tree/latest) (05.11.2024)
+All notable changes to this project will be documented in this file.
 
-[Full Changelog](https://github.com/wtfo-guru/dynaddrmgr/compare/v0.5.6...latest)
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Merged pull requests:**
+## [Unreleased]
 
-- PT001 errors [\#110](https://github.com/wtfo-guru/dynaddrmgr/pull/110) ([qs5779](https://github.com/qs5779))
-- poetry update [\#108](https://github.com/wtfo-guru/dynaddrmgr/pull/108) ([qs5779](https://github.com/qs5779))
-- poetry update [\#107](https://github.com/wtfo-guru/dynaddrmgr/pull/107) ([qs5779](https://github.com/qs5779))
-- chore\(deps-dev\): bump testfixtures from 7.2.2 to 8.1.0 [\#101](https://github.com/wtfo-guru/dynaddrmgr/pull/101) ([dependabot[bot]](https://github.com/apps/dependabot))
-- poetry update, optonal test, mypy strict false [\#100](https://github.com/wtfo-guru/dynaddrmgr/pull/100) ([qs5779](https://github.com/qs5779))
-- chore\(deps-dev\): bump requests-cache from 1.1.1 to 1.2.0 [\#98](https://github.com/wtfo-guru/dynaddrmgr/pull/98) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(deps-dev\): bump sphinx-autodoc-typehints from 1.25.3 to 2.0.0 [\#95](https://github.com/wtfo-guru/dynaddrmgr/pull/95) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(deps-dev\): bump safety from 2.3.4 to 3.0.1 [\#93](https://github.com/wtfo-guru/dynaddrmgr/pull/93) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(deps\): bump jinja2 from 3.1.2 to 3.1.3 [\#92](https://github.com/wtfo-guru/dynaddrmgr/pull/92) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(deps\): bump dnspython from 2.4.2 to 2.5.0 [\#91](https://github.com/wtfo-guru/dynaddrmgr/pull/91) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(deps-dev\): bump black from 23.12.1 to 24.1.1 [\#90](https://github.com/wtfo-guru/dynaddrmgr/pull/90) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(deps-dev\): bump sphinx-autodoc-typehints from 1.25.2 to 1.25.3 [\#89](https://github.com/wtfo-guru/dynaddrmgr/pull/89) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(deps-dev\): bump pytest from 7.4.4 to 8.0.0 [\#88](https://github.com/wtfo-guru/dynaddrmgr/pull/88) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(deps\): bump actions/cache from 3 to 4 [\#87](https://github.com/wtfo-guru/dynaddrmgr/pull/87) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(deps\): bump codecov/codecov-action from 3 to 4 [\#86](https://github.com/wtfo-guru/dynaddrmgr/pull/86) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Poetry update [\#85](https://github.com/wtfo-guru/dynaddrmgr/pull/85) ([qs5779](https://github.com/qs5779))
+## 0.6.0 - 2024-07-03
+
+### Changed
+
+- Updated wtforglib (0.8.4 -> 1.0.0)
+- Updated nslookup (1.7.0 -> 1.8.1)
+- Updated typing-extensions (4.11.0 -> 4.12.2)
+- Updated annotated-types (0.6.0 -> 0.7.0)
+- Updated certifi (2024.2.2 -> 2024.6.2)
+- Updated packaging (24.0 -> 24.1)
+- Updated pycodestyle (2.11.1 -> 2.12.0)
+- Updated pydantic-core (2.18.2 -> 2.20.0)
+- Updated urllib3 (2.2.1 -> 2.2.2)
+- Updated bandit (1.7.8 -> 1.7.9)
+- Updated cryptography (42.0.7 -> 42.0.8)
+- Updated flake8 (7.0.0 -> 7.1.0)
+- Updated marshmallow (3.21.2 -> 3.21.3)
+- Updated platformdirs (4.2.1 -> 4.2.2)
+- Updated pydantic (2.7.1 -> 2.8.0)
+- Updated requests (2.31.0 -> 2.32.3)
+- Updated setuptools (69.5.1 -> 70.2.0)
+- Updated authlib (1.3.0 -> 1.3.1)
+- Updated coverage (7.5.1 -> 7.5.4)
+- Updated dpath (2.1.6 -> 2.2.0)
+- Updated flake8-comprehensions (3.14.0 -> 3.15.0)
+- Updated more-itertools (10.2.0 -> 10.3.0)
+- Updated pytest (8.2.0 -> 8.2.2)
+- Updated requests-cache (1.2.0 -> 1.2.1)
+- Updated mypy (1.10.0 -> 1.10.1)
+- Updated safety (3.2.0 -> 3.2.3)
+- Updated sphinx-autodoc-typehints (2.1.0 -> 2.2.2)
+- Updated testfixtures (8.2.0 -> 8.3.0)
 
 ## [v0.5.6](https://github.com/wtfo-guru/dynaddrmgr/tree/v0.5.6) (05.11.2024)
 

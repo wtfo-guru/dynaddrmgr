@@ -9,6 +9,7 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "cSpell.words": [
+        "APPNM",
         "bport",
         "brule",
         "cosprings",
@@ -23,6 +24,9 @@
         "hinfo",
         "ipaddr",
         "iport",
+        "minlen",
+        "netprefix",
+        "Nslookup",
         "teknofile",
         "tport",
         "TSTATUS",

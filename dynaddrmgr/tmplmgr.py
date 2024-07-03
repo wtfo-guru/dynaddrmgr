@@ -28,7 +28,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         """Constructor for TemplateManager class."""
         super().__init__(config, **kwargs)
         opts = basic_options(self.debug, self.test, self.verbose)
-        self.writer = TemplateWriter(opts, self)
+        self.writer = TemplateWriter(opts)
 
     def manage_templates(self) -> int:
         """Manage the templates specified in the configuration file.
