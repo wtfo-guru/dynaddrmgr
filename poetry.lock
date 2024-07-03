@@ -2384,13 +2384,13 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [[package]]
 name = "wtforglib"
-version = "1.0.0"
+version = "1.0.1"
 description = "A set of utility functions I use in my various python projects."
 optional = false
 python-versions = "<4.0,>=3.9.0"
 files = [
-    {file = "wtforglib-1.0.0-py3-none-any.whl", hash = "sha256:87df38d618ec2b88859a87a57379e5ac3ba8f2bbbcb6402c773b7c8f1875cdf5"},
-    {file = "wtforglib-1.0.0.tar.gz", hash = "sha256:9324378848baa7ac7e01d31b44c1183fb43cf01cf046c5412b7739e8a0f0cde6"},
+    {file = "wtforglib-1.0.1-py3-none-any.whl", hash = "sha256:0342968da3a5fa78cc6b3e5fd82d058d1d534969139fbcf0464b35b2b7f1d99a"},
+    {file = "wtforglib-1.0.1.tar.gz", hash = "sha256:679eb3c0208c7e97ed2fde06bfd47aa6e93c5e5ced1aaf265d4fcbc14c9bcaf2"},
 ]
 
 [package.dependencies]
@@ -2416,4 +2416,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "296fa669f0329f330c278cf8c5c107948f8ea65ba77d032c7f4a041df95e441b"
+content-hash = "4d2489fcb78465464389eb3d0cb624add2246e59b80e9f9fd43e4d36496a9738"

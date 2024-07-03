@@ -15,7 +15,9 @@ from dns.exception import DNSException
 from nslookup import DNSresponse, Nslookup
 from wtforglib.ipaddress_foos import ipv6_to_netprefix, is_ipv6_address
 from wtforglib.kinds import StrAnyDict
-from wtforglib.scribe import Scribe
+from wtforglib.options import SimpleScribe
+
+from dynaddrmgr.kinds import LoggingClass
 
 APPNM = "dynaddrmgr"
 
@@ -37,7 +39,7 @@ class FakedProcessResult:
         stderr : str
             Fake stderr
         returncode : int
-            Fake returcode
+            Fake returncode
         """
         self.stdout = stdout
         self.stderr = stderr
@@ -47,7 +49,7 @@ class FakedProcessResult:
 WtfProcessResult = Union[subprocess.CompletedProcess[str], FakedProcessResult]
 
 
-class DynAddrMgr(Scribe):
+class DynAddrMgr:
     """App class represents the main dynaddrmgr application."""
 
     config: StrAnyDict
@@ -55,6 +57,9 @@ class DynAddrMgr(Scribe):
     test: bool
     verbose: bool
     dns: Nslookup
+    logger: LoggingClass
+
+    _noop: bool
 
     def __init__(self, config: StrAnyDict, **kwargs):  # noqa: WPS210
         """Initialize DynAddrMgr application object.
@@ -70,31 +75,15 @@ class DynAddrMgr(Scribe):
         noop : bool
         test : bool
         verbose : bool
+        logger : LoggingClass
         """
         self.dns = Nslookup()
         self.config = config
         self.debug = kwargs.get("debug", False)
-        self.noop = kwargs.get("noop", False)
+        self._noop = kwargs.get("noop", False)
         self.test = kwargs.get("test", False)
         self.verbose = kwargs.get("verbose", False)
-        logfn = self.config.get("logfile", "")
-        syslognm = APPNM if self.config.get("syslog", False) else ""
-        screen = self.debug or self.test or self.verbose
-        if not logfn and not syslognm and not screen:
-            syslognm = APPNM
-        if self.debug or self.test:
-            level = "debug"
-        elif self.verbose:
-            level = "info"
-        else:
-            level = "warn"
-        super().__init__(
-            name=APPNM,
-            level=level,
-            logfn=logfn,
-            syslognm=syslognm,
-            screen=screen,
-        )
+        self.logger = kwargs.get("logger", SimpleScribe())
 
     def _six_to_net(
         self,
@@ -135,7 +124,7 @@ class DynAddrMgr(Scribe):
         minlen: int = 1,
         ipv6net_style: str = "standard",
     ) -> Tuple[str, ...]:
-        """Retrun a unique list of IP source strings.
+        """Return a unique list of IP source strings.
 
         Parameters
         ----------
@@ -146,7 +135,7 @@ class DynAddrMgr(Scribe):
         ipv6 : bool
             Lookup ipv6 flag
         ipv6net : int
-            Prefix length if ipv6 addreses represent networks
+            Prefix length if ipv6 addresses represent networks
         minlen : int
             Minimum number of addresses to accept
         ipv6net_style : string
@@ -183,7 +172,7 @@ class DynAddrMgr(Scribe):
         ipv6net: int = 0,
         ipv6net_style: str = "standard",
     ) -> Tuple[str, ...]:
-        """Retrun a unique list of IP source strings.
+        """Return a unique list of IP source strings.
 
         Parameters
         ----------
@@ -194,7 +183,7 @@ class DynAddrMgr(Scribe):
         ipv6 : bool
             Lookup ipv6 flag
         ipv6net : int
-            Prefix length if ipv6 addreses represent networks
+            Prefix length if ipv6 addresses represent networks
         ipv6net_style : string
             One of standard, postfix
 
@@ -231,7 +220,7 @@ class DynAddrMgr(Scribe):
         always = kwargs.get("always", False)
         check = kwargs.get("check", True)
         cmd_str = "{0}".format(" ".join(args))
-        if not always and self.noop:
+        if not always and self._noop:
             print("noex: {0}".format(cmd_str))
             return FakedProcessResult()
         self.logger.info("ex: {0}".format(cmd_str))
