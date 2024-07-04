@@ -23,6 +23,7 @@ from typing import AnyStr
 
 import click
 from click.core import Context
+from loguru import logger
 from wtforglib.supers import requires_super_user
 
 from dynaddrmgr import VERSION
@@ -81,7 +82,7 @@ def print_version(ctx: Context, aparam: AnyStr, avalue: AnyStr) -> None:
     is_eager=True,
     help="Show version and exit",
 )
-def main(  # noqa: WPS216
+def main(  # noqa: WPS216, C901
     config: str,
     debug: bool,
     test: bool,
@@ -93,6 +94,12 @@ def main(  # noqa: WPS216
         requires_super_user("When --no-test  dynaddrmgr")
     cfg = load_config_file(config, "dynaddrmgr", debug)
     fwtype = cfg.get("firewall_handler", "unspecified").lower()
+    if not debug:
+        level = "INFO"
+        if not verbose:
+            level = "WARNING"
+        logger.remove(0)
+        logger.add(sys.stderr, level=level)
     try:
         if fwtype == "ufw":
             app = UfwHandler(cfg, debug=debug, noop=noop, test=test, verbose=verbose)
