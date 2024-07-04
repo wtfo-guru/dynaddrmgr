@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.6.1 - 2024-07-04
+
+### Changed
+
+- Initialize logger according debug, verbose parameters and pass to app.
+
 ## 0.6.0 - 2024-07-03
 
 ### Changed

@@ -28,6 +28,8 @@
         "netprefix",
         "Nslookup",
         "teknofile",
+        "tmplmgr",
+        "tmplwrtr",
         "tport",
         "TSTATUS",
         "uport"
