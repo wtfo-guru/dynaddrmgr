@@ -111,8 +111,9 @@ class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
                     nr.status = 1  # matched
                     br.status = 1  # matched
                     self.logger.debug(
-                        "Skipping rule %s because it is already in the before list.",  # noqa: WPS323 E501
-                        nr,
+                        "Skipping rule {0} because it is already in the before list.".format(  # noqa: E501
+                            nr,
+                        ),
                     )
                     break
         errors += self._delete_unmatched_rules()

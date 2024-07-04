@@ -17,6 +17,7 @@
         "dynhosts",
         "dynpr",
         "dynrules",
+        "dyntmpls",
         "fbefore",
         "fwhdlr",
         "fwtype",

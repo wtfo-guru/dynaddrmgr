@@ -19,10 +19,8 @@ import sys
 import traceback
 import types
 from datetime import datetime
-from typing import AnyStr
 
 import click
-from click.core import Context
 from loguru import logger
 from wtforglib.supers import requires_super_user
 
@@ -31,14 +29,6 @@ from dynaddrmgr.foos import load_config_file
 from dynaddrmgr.ufw import UfwHandler
 
 CONTEXT_SETTINGS = types.MappingProxyType({"help_option_names": ["-h", "--help"]})
-
-
-def print_version(ctx: Context, aparam: AnyStr, avalue: AnyStr) -> None:
-    """Print package version and exit."""
-    if not avalue or ctx.resilient_parsing:
-        return
-    print(VERSION)  # noqa: WPS421
-    ctx.exit()
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
@@ -73,15 +63,7 @@ def print_version(ctx: Context, aparam: AnyStr, avalue: AnyStr) -> None:
     default=False,
     help="Specify verbose mode, default: False",
 )
-@click.option(
-    "-V",
-    "--version",
-    is_flag=True,
-    expose_value=False,
-    callback=print_version,
-    is_eager=True,
-    help="Show version and exit",
-)
+@click.version_option(VERSION)
 def main(  # noqa: WPS216, C901
     config: str,
     debug: bool,
@@ -102,7 +84,14 @@ def main(  # noqa: WPS216, C901
         logger.add(sys.stderr, level=level)
     try:
         if fwtype == "ufw":
-            app = UfwHandler(cfg, debug=debug, noop=noop, test=test, verbose=verbose)
+            app = UfwHandler(
+                cfg,
+                debug=debug,
+                noop=noop,
+                test=test,
+                verbose=verbose,
+                logger=logger,
+            )
         else:
             raise ValueError("firewall {0} is not supported".format(fwtype))
         rtn_val = app.manage_rules()
