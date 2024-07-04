@@ -9,7 +9,7 @@
       "justMyCode": false,
       "sudo": true,
       "console": "integratedTerminal",
-      "args": ["--debug", "-c", "/home/jim/.config/dynaddrmgr.yaml"]
+      "args": ["--noop", "-c", "/home/jim/.config/dynaddrmgr.yaml"]
     },
     {
       "name": "Python: Module dyntmpls",

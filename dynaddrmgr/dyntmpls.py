@@ -17,10 +17,8 @@ Misc variables:
 
 import sys
 import types
-from typing import AnyStr
 
 import click
-from click.core import Context
 from loguru import logger
 from wtforglib.supers import requires_super_user
 
@@ -29,14 +27,6 @@ from dynaddrmgr.foos import load_config_file
 from dynaddrmgr.tmplmgr import TemplateManager
 
 CONTEXT_SETTINGS = types.MappingProxyType({"help_option_names": ["-h", "--help"]})
-
-
-def print_version(ctx: Context, aparam: AnyStr, avalue: AnyStr) -> None:
-    """Print package version and exit."""
-    if not avalue or ctx.resilient_parsing:
-        return
-    print(VERSION)  # noqa: WPS421
-    ctx.exit()
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
@@ -71,15 +61,7 @@ def print_version(ctx: Context, aparam: AnyStr, avalue: AnyStr) -> None:
     default=False,
     help="Specify verbose mode, default: False",
 )
-@click.option(
-    "-V",
-    "--version",
-    is_flag=True,
-    expose_value=False,
-    callback=print_version,
-    is_eager=True,
-    help="Show version and exit",
-)
+@click.version_option(VERSION)
 def main(  # noqa: WPS216
     config: str,
     debug: bool,

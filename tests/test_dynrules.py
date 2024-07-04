@@ -16,7 +16,7 @@ Options:
   -n, --noop / --no-noop        Specify noop mode, default: False
   -t, --test / --no-test        Specify test mode, default: False
   -v, --verbose / --no-verbose  Specify verbose mode, default: False
-  -V, --version                 Show version and exit
+  --version                     Show the version and exit.
   -h, --help                    Show this message and exit.
 """
 
@@ -51,7 +51,7 @@ def test_dynrules_version(runner):
     test_result = runner.invoke(dynrules.main, ["--version"])
     assert not test_result.exception
     assert test_result.exit_code == 0
-    assert test_result.output.strip() == VERSION
+    assert test_result.output.strip() == "main, version {0}".format(VERSION)
 
 
 def test_dynrules_help(runner):
