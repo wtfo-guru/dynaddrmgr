@@ -66,8 +66,8 @@ class DynAddrMgr:
 
         Parameters
         ----------
-        config : str
-            Path to configuration file.
+        config : StrAnyDict
+            Dictionary of settings
 
         Keyword arguments
         -----------------
