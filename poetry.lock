@@ -2384,13 +2384,13 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [[package]]
 name = "wtforglib"
-version = "1.0.1"
+version = "1.0.2"
 description = "A set of utility functions I use in my various python projects."
 optional = false
 python-versions = "<4.0,>=3.9.0"
 files = [
-    {file = "wtforglib-1.0.1-py3-none-any.whl", hash = "sha256:0342968da3a5fa78cc6b3e5fd82d058d1d534969139fbcf0464b35b2b7f1d99a"},
-    {file = "wtforglib-1.0.1.tar.gz", hash = "sha256:679eb3c0208c7e97ed2fde06bfd47aa6e93c5e5ced1aaf265d4fcbc14c9bcaf2"},
+    {file = "wtforglib-1.0.2-py3-none-any.whl", hash = "sha256:cc96e5028e119fc05b8af4aec040b22b06fcadd89cb9dd75225f0b99607bf250"},
+    {file = "wtforglib-1.0.2.tar.gz", hash = "sha256:337ce7776d3ea523de98d3c07f7f2bb06c32fec6b62b68e89453a1b7130798aa"},
 ]
 
 [package.dependencies]
