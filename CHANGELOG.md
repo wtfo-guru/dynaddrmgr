@@ -8,10 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-0.6.3-dev0 - 2024-08-01
+0.6.3-dev3 - 2024-12-03
 
 ### Changed
 
+- Updated tomli (2.0.2 -> 2.2.1)
 - Updated pydantic-core (2.20.0 -> 2.20.1)
 - Updated cryptography (42.0.8 -> 43.0.0)
 - Updated pydantic (2.8.0 -> 2.8.2)
