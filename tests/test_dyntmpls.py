@@ -4,7 +4,8 @@ import pytest
 import testfixtures
 from click.testing import CliRunner
 
-from dynaddrmgr import VERSION, dyntmpls
+from dynaddrmgr import dyntmpls
+from dynaddrmgr.constants import VERSION
 
 HELPTXT = """Usage: main [OPTIONS]
 

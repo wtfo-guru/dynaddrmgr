@@ -22,7 +22,7 @@ import click
 from loguru import logger
 from wtforglib.supers import requires_super_user
 
-from dynaddrmgr import VERSION
+from dynaddrmgr.constants import VERSION
 from dynaddrmgr.foos import load_config_file
 from dynaddrmgr.tmplmgr import TemplateManager
 
