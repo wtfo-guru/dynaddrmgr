@@ -165,7 +165,10 @@ class DynAddrMgr:
                 first_set = set(answer)
                 if ipv6 and ipv6net:
                     return self._to_net(
-                        ipv6net, list(first_set), ipv6net_style, ipv4net
+                        ipv6net,
+                        list(first_set),
+                        ipv6net_style,
+                        ipv4net,
                     )
                 return tuple(first_set)
             raise DNSException(  # type: ignore [no-untyped-call]
