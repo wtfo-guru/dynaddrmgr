@@ -9,6 +9,7 @@ Misc variables:
 """
 
 import subprocess  # noqa: S404
+from ipaddress import ip_network
 from typing import List, Tuple, Union
 
 from dns.exception import DNSException
@@ -85,11 +86,12 @@ class DynAddrMgr:
         self.verbose = kwargs.get("verbose", False)
         self.logger = kwargs.get("logger", SimpleScribe())
 
-    def _six_to_net(
+    def _to_net(
         self,
         prefix_len: int,
         ips: List[str],
         ipv6net_style="standard",
+        ipv4net: bool = False,
     ) -> Tuple[str, ...]:
         """Return a tuple of ip source where ip addresses are converted to networks.
 
@@ -101,6 +103,8 @@ class DynAddrMgr:
             List of IP addresses to convert if needed
         ipv6net_style : string
             One of standard, postfix
+        ipv4net : bool
+            Network notation
 
         Returns
         -------
@@ -111,6 +115,8 @@ class DynAddrMgr:
         for ip in ips:
             if is_ipv6_address(ip):
                 converted.append(ipv6_to_netprefix(ip, prefix_len, ipv6net_style))
+            elif ipv4net:
+                converted.append(str(ip_network(ip)))
             else:
                 converted.append(ip)
         return tuple(converted)
@@ -123,6 +129,7 @@ class DynAddrMgr:
         ipv6net: int = 0,
         minlen: int = 1,
         ipv6net_style: str = "standard",
+        ipv4net: bool = False,
     ) -> Tuple[str, ...]:
         """Return a unique list of IP source strings.
 
@@ -140,6 +147,8 @@ class DynAddrMgr:
             Minimum number of addresses to accept
         ipv6net_style : string
             One of standard, postfix
+        ipv4net : bool
+            Network notation
 
         Returns
         -------
@@ -155,7 +164,9 @@ class DynAddrMgr:
             if len(answer) >= minlen:
                 first_set = set(answer)
                 if ipv6 and ipv6net:
-                    return self._six_to_net(ipv6net, list(first_set), ipv6net_style)
+                    return self._to_net(
+                        ipv6net, list(first_set), ipv6net_style, ipv4net
+                    )
                 return tuple(first_set)
             raise DNSException(  # type: ignore [no-untyped-call]
                 "'{0}' name expected {1} addresses.!!!".format(name, minlen),
@@ -171,6 +182,7 @@ class DynAddrMgr:
         ipv6: bool,
         ipv6net: int = 0,
         ipv6net_style: str = "standard",
+        ipv4net: bool = False,
     ) -> Tuple[str, ...]:
         """Return a unique list of IP source strings.
 
@@ -186,6 +198,8 @@ class DynAddrMgr:
             Prefix length if ipv6 addresses represent networks
         ipv6net_style : string
             One of standard, postfix
+        ipv4net : bool
+            Network notation
 
         Returns
         -------
