@@ -115,6 +115,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
                     host.get("ipv6", True),
                     host.get("ipv6net", 0),
                     host.get("ipv6net_style", "standard"),
+                    host.get("ipv4net", False),
                 )
                 tmpl_var[name] = self._unique_sorted_list(list(unsorted))
             else:

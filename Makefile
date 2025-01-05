@@ -3,7 +3,7 @@ SHELL:=/usr/bin/env bash
 PROJECT_NAME ?= $(shell basename $$(git rev-parse --show-toplevel) | sed -e "s/^python-//")
 PACKAGE_DIR ?= $(shell echo $(PROJECT_NAME) | tr "-" "_")
 PROJECT_VERSION ?= $(shell grep ^current_version .bumpversion.cfg | awk '{print $$NF'} | tr '-' '.')
-WHEELS ?= /home/jim/kbfs/private/jim5779/wheels
+WHEELS ?= /home/jim/dev/wheels
 TEST_MASK = tests
 GITHUB_ORG ?= wtfo-guru
 
