@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-0.6.3-dev3 - 2024-12-03
+## [0.6.3] - 2025-01-05
+
+### Added
+
+- Support for ipv4net in templates
 
 ### Changed
 
