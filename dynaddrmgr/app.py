@@ -163,7 +163,7 @@ class DynAddrMgr:
         if answer:
             if len(answer) >= minlen:
                 first_set = set(answer)
-                if ipv6 and ipv6net:
+                if ipv4net or ipv6net:
                     return self._to_net(
                         ipv6net,
                         list(first_set),
