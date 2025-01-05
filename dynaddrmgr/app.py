@@ -226,6 +226,7 @@ class DynAddrMgr:
             ipv6net,
             minlen,
             ipv6net_style,
+            ipv4net,
         )
 
     def _run_command(
