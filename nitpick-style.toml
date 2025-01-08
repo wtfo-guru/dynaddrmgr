@@ -1,0 +1,19 @@
+["setup.cfg".black]
+line-length = 88
+verbose = true
+
+# ["pyproject.toml".tool.isort]
+# profile = 'black'
+# line_length = 100
+# py_version = 311
+# skip = [".gitignore", ".dockerignore"]
+# known_first_party = ["experimental"]
+# known_third_party = ["telegraf"]
+
+["setup.cfg".flake8]
+max-line-length = 88
+inline-quotes = "double"
+
+["setup.cfg".isort]
+line_length = 88
+include_trailing_comma = true

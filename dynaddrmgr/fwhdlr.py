@@ -2,7 +2,6 @@
 Top level module for dynaddrmgr application.
 
 Classes:
-    FakedProcessResult
     FirewallHandler
 """
 

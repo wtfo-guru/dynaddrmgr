@@ -18,8 +18,8 @@
       "module": "dynaddrmgr.dyntmpls",
       "justMyCode": false,
       "sudo": true,
-      "console": "externalTerminal",
-      "args": ["--debug", "--test", "-c", "/home/jim/.config/dynaddrmgr.yaml"]
+      "console": "integratedTerminal",
+      "args": ["--debug", "-c", "/home/jim/.config/dynaddrmgr.yaml"]
     }
   ]
 }
