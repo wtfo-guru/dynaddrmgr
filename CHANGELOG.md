@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+0.7.0-dev0 - 2025-01-05
+
+### Added
+
+- Support for tailscale addresses
+
+### Removed
+
+- Support for python version < 3.10
+
 ## [0.6.3] - 2025-01-05
 
 ### Added
