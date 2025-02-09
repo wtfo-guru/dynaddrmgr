@@ -1,0 +1,13 @@
+###############################################
+### file managed by dynaddrmgr, do not edit ###
+###############################################
+
+# The DEFAULT allows a global definition of the options. They can be overridden
+# in each jail afterwards.
+
+[DEFAULT]
+{% if template_dict.whitelist is defined %}
+ignoreip = 127.0.0.1/8,::1,fe80::/10,{{ template_dict.whitelist|join(',') }}
+{% else %}
+ignoreip = 127.0.0.1/8,::1,fe80::/10
+{% endif %}
