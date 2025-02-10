@@ -1,0 +1,28 @@
+###############################################
+### file managed by dynaddrmgr, do not edit ###
+###############################################
+    # Access Rules
+{%- if template_dict %}
+    # dynamic hosts
+  {%- for key, value in template_dict.items() %}
+    {%- if key not in ['whitelist', 'tailscale_hosts'] %}
+      ## hostname: {{ key }}
+      {%- for addr in value %}
+    allow {{ addr }};
+      {%- endfor %}
+    {% elif key == 'tailscale_hosts' %}
+    # tailscale hosts
+    {%- for ip, hn in value.items() %}
+    allow {{ ip }};  # {{ hn }}
+    {%- endfor %}
+    {%- endif %}
+  {%- endfor %}
+{% endif %}
+    allow 192.168.66.0/24;                        # aguada lan
+    allow 172.16.0.0/12;                          # docker network
+    allow 45.32.170.139;                          # lam
+    allow 2001:19f0:9000:2d16:5400:5ff:fe40:8908; # lam
+    deny all;
+    # Access checks must...
+    satisfy any;
+{# End of template #}

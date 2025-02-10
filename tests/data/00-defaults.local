@@ -1,0 +1,10 @@
+###############################################
+### file managed by dynaddrmgr, do not edit ###
+###############################################
+
+# The DEFAULT allows a global definition of the options. They can be overridden
+# in each jail afterwards.
+
+[DEFAULT]
+
+ignoreip = 127.0.0.1/8,::1,fe80::/10,72.99.49.131,24.50.225.183,2605:1111:6208:2d55::/64

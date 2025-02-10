@@ -1,6 +1,5 @@
 """Test level module for dynaddrmgr."""
 
-import pytest
 import testfixtures
 from click.testing import CliRunner
 
@@ -41,13 +40,7 @@ TSTATUS = """Status: active
 """  # noqa: E501
 
 
-@pytest.fixture
-def runner():
-    """Fixture to create a test runner."""
-    return CliRunner()
-
-
-def test_dynrules_version(runner):
+def test_dynrules_version(runner: CliRunner) -> None:
     """Test version option."""
     test_result = runner.invoke(dynrules.main, ["--version"])
     assert not test_result.exception
@@ -55,7 +48,7 @@ def test_dynrules_version(runner):
     assert test_result.output.strip() == "main, version {0}".format(VERSION)
 
 
-def test_dynrules_help(runner):
+def test_dynrules_help(runner: CliRunner) -> None:
     """Test help option."""
     test_result = runner.invoke(dynrules.main, ["-h"])  # verifies the short context
     assert test_result.exit_code == 0

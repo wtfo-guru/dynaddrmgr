@@ -1,3 +1,3 @@
 """Top level module for dynaddrmgr."""
 
-VERSION = "0.6.3"
+VERSION = "0.7.0"

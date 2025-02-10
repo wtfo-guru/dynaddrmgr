@@ -9,7 +9,7 @@
       "justMyCode": false,
       "sudo": true,
       "console": "integratedTerminal",
-      "args": ["--noop", "-c", "/home/jim/.config/dynaddrmgr.yaml"]
+      "args": ["--noop", "-c", "/data/jim/development/python/packages/dynaddrmgr/tests/data/dynaddrmgr.yaml"]
     },
     {
       "name": "Python: Module dyntmpls",
@@ -18,8 +18,8 @@
       "module": "dynaddrmgr.dyntmpls",
       "justMyCode": false,
       "sudo": true,
-      "console": "externalTerminal",
-      "args": ["--debug", "--test", "-c", "/home/jim/.config/dynaddrmgr.yaml"]
+      "console": "integratedTerminal",
+      "args": ["--debug", "-c", "/data/jim/development/python/packages/dynaddrmgr/tests/data/dynaddrmgr.yaml"]
     }
   ]
 }

@@ -1,0 +1,66 @@
+---
+logfile: "{{ test_data_dir }}/dynaddrmgr.log"
+syslog: false
+firewall_handler: ufw
+tailscale: true
+dynamic_hosts_open_ports:
+  - name: dynpr.wtforg.net
+    ipv4: true
+    ipv6: true
+    ipv6net: 64
+    ports:
+      tcp:
+        - 22
+  - name: cosprings.teknofile.net
+    ipv4: true
+    ipv6: false
+    ports:
+      tcp:
+        - 22
+dynamic_host_templates:
+  wtf-privy-static:
+      src: "{{ test_data_dir }}/access-wtf-trusted.conf.j2"
+      dest: "{{ test_data_dir }}/access-wtf-trusted.conf"
+      owner: root
+      group: sudo
+      mode: "0640"
+      hosts:
+        - name: dynpr.wtforg.net
+          ipv4: true
+          ipv6: true
+          ipv6net: 64
+        - name: cosprings.teknofile.net
+          ipv4: true
+          ipv6: false
+        - name: ipad-pro-12-9-gen-4.tail62ad0.ts.net
+          ipv4: true
+          ipv6: false
+        - name: google-pixel-6.tail62ad0.ts.net
+          ipv4: true
+          ipv6: false
+      backup: 5
+      backup_dir: "{{ test_backup_dir }}"
+      on_changed:
+        - echo
+        - "systemctl reload nginx.service"
+  fail2ban-defaults:
+    src: "{{ test_data_dir }}/00-defaults-vultr.conf.j2"
+    dest: "{{ test_data_dir}}/00-defaults.local"
+    owner: root
+    group: sudo
+    mode: "0640"
+    hosts:
+      - name: dynpr.wtforg.net
+        ipv4: true
+        ipv6: true
+        ipv6net: 64
+      - name: cosprings.teknofile.net
+        ipv4: true
+        ipv6: false
+    backup: 5
+    backup_dir: "{{ test_backup_dir }}"
+    on_changed:
+        - echo
+        - "systemctl reload fail2ban.service"
+...
+# vim: syntax=yaml
