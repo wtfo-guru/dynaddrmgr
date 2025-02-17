@@ -241,7 +241,7 @@ class DynAddrMgr:
         if not always and self._noop:
             print("noex: {0}".format(cmd_str))
             return FakedProcessResult()
-        self.logger.info("ex: {0}".format(cmd_str))
+        self.logger.debug("ex: {0}".format(cmd_str))
         return subprocess.run(
             args,
             check=check,

@@ -196,8 +196,13 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         return self._status_to_hosts(ts_status)
 
     def _parse_tailscale_line(self, ts_status: TailscaleStatus, ts_line: str) -> bool:
-        """Parse a lint from tailscale status."""
+        """Parse a line from tailscale status."""
         line = ts_line.strip()
+        if not line:
+            return False  # empty line
+        if line.startswith("#"):
+            logger.warning(line)
+            return False
         parts = line.split(None, 2)
         if self.debug:
             logger.debug(parts)
