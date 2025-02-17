@@ -8,7 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-0.7.0 - 2025-01-05
+## [0.7.1] - 2025-02-17
+
+### Changed
+
+- _run_command logger debug instead of info for ex:
+
+### Fixed
+
+- tailscale status line parsing
+
+## [0.7.0] - 2025-01-05
 
 ### Added
 
