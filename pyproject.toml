@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
-version = "0.7.1"
+version = "0.7.2-dev0"
 license = "MIT"
 
 authors = [
@@ -64,7 +64,7 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 sphinx = "^8.0"
-sphinx-autodoc-typehints = ">=1.23,<3.0"
+sphinx-autodoc-typehints = "^3.0"
 m2r2 = "^0.3"
 tomli = "^2.0"
 
