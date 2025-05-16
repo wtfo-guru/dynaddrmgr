@@ -1,0 +1,19 @@
+---
+logfile: /var/log/wtfo/dynaddrmgr.log
+syslog: false
+firewall_handler: ufw
+tailscale: True
+dynamic_hosts_open_ports:
+  - name: bogus.example.com
+    ipv4: false
+    ipv6: true
+    ipv6net: 64
+    ports:
+      tcp:
+        - 22
+      udp:
+        - 5353
+      app:
+        - DNS
+...
+# vim: syntax=yaml

@@ -1,0 +1,9 @@
+#
+# Dns host file for testing
+#
+
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+10.44.55.66                     bogus.example.com
+2605:ba00:6208:3681:33:44:55:66 bogus.example.com

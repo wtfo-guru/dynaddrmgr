@@ -1,0 +1,10 @@
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 22/tcp                     ALLOW IN    192.168.66.0/24
+[ 2] 5353/udp                   ALLOW IN    192.168.66.0/24
+[ 3] DNS                        ALLOW IN    192.168.66.0/24
+[ 4] 22/tcp                     ALLOW IN    2605:ba00:6208:2d55::/64   # 22/tcp-bogus.example.com (dynaddrmgr)
+[ 5] 5353/udp                   ALLOW IN    2605:ba00:6208:2d55::/64   # 5353/udp-bogus.example.com (dynaddrmgr)
+[ 6] DNS (v6)                   ALLOW IN    2605:ba00:6208:2d55::/64   # DNS/app-bogus.example.com (dynaddrmgr)

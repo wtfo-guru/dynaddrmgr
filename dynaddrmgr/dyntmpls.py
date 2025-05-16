@@ -90,7 +90,7 @@ def main(  # noqa: WPS216
         rtn_val = app.manage_templates()
     except Exception as ex:
         rtn_val = 1
-        app.logger.error(str(ex))
+        app.daily.log_message("dyntmpls_main_ex", str(ex))
     return rtn_val
 
 
