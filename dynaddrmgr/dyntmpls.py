@@ -62,7 +62,7 @@ CONTEXT_SETTINGS = types.MappingProxyType({"help_option_names": ["-h", "--help"]
     help="Specify verbose mode, default: False",
 )
 @click.version_option(VERSION)
-def main(  # noqa: WPS216
+def main(  # noqa: WPS216, C901
     config: str,
     debug: bool,
     test: bool,
@@ -90,7 +90,10 @@ def main(  # noqa: WPS216
         rtn_val = app.manage_templates()
     except Exception as ex:
         rtn_val = 1
+        if test:
+            logger.error(str(ex))
         app.daily.log_message("dyntmpls_main_ex", str(ex))
+        sys.exit(rtn_val)
     return rtn_val
 
 
