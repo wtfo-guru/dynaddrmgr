@@ -19,6 +19,7 @@ from wtforglib.kinds import StrAnyDict
 from wtforglib.options import SimpleScribe
 
 from dynaddrmgr.kinds import LoggingClass
+from dynaddrmgr.singles import DailyLogger
 
 APPNM = "dynaddrmgr"
 
@@ -50,7 +51,7 @@ class FakedProcessResult:
 WtfProcessResult = Union[subprocess.CompletedProcess[str], FakedProcessResult]
 
 
-class DynAddrMgr:
+class DynAddrMgr:  # noqa: WPS230
     """App class represents the main dynaddrmgr application."""
 
     config: StrAnyDict
@@ -59,6 +60,7 @@ class DynAddrMgr:
     verbose: bool
     dns: Nslookup
     logger: LoggingClass
+    daily: DailyLogger
 
     _noop: bool
 
@@ -85,6 +87,7 @@ class DynAddrMgr:
         self.test = kwargs.get("test", False)
         self.verbose = kwargs.get("verbose", False)
         self.logger = kwargs.get("logger", SimpleScribe())
+        self.daily = DailyLogger()
 
     def _to_net(
         self,

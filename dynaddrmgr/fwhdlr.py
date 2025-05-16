@@ -106,6 +106,11 @@ class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
         errors = 0
         for nr in self.new_rules:
             for br in self.before_rules:
+                if self.debug:
+                    snr = str(nr)
+                    sbr = str(br)
+                    self.logger.debug("nr: {0}".format(snr))
+                    self.logger.debug("br: {0}".format(sbr))
                 if nr == br:
                     nr.status = 1  # matched
                     br.status = 1  # matched

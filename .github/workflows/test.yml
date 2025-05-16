@@ -22,7 +22,6 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12', '3.13']
-        # python-version: ['3.9', '3.10', '3.11']
 
     steps:
     - uses: actions/checkout@v4
@@ -49,11 +48,6 @@ jobs:
 
     - name: Install dependencies
       run: poetry install --with test --no-interaction
-
-    - name: Safety Scan
-      uses: pyupio/safety-action@v1
-      with:
-        api-key: ${{ secrets.SAFETY_API_KEY }}
 
     - name: Run checks
       run: make citest

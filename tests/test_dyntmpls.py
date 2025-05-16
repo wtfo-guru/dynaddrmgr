@@ -53,6 +53,6 @@ def test_access_templates(
     fake_dir = test_data.add_real_files(fs, real_files)
     assert fake_dir.exists()
     cfg = test_data.add_real_template(fs, "dynaddrmgr.yaml.j2")
-    test_result = runner.invoke(dyntmpls.main, ["-c", cfg, "-t"])
+    test_result = runner.invoke(dyntmpls.main, ["-c", cfg, "-d", "-t"])
     assert not test_result.exception
     assert test_result.exit_code == 0

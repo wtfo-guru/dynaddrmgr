@@ -9,6 +9,7 @@ Misc variables:
 """
 
 import re
+import sys
 import tempfile
 from pathlib import Path
 from typing import List, Tuple
@@ -16,27 +17,9 @@ from typing import List, Tuple
 from wtforglib.kinds import StrAnyDict
 
 from dynaddrmgr.app import WtfProcessResult
+from dynaddrmgr.constants import TEST_DIR
 from dynaddrmgr.fwhdlr import FirewallHandler
 from dynaddrmgr.rule import FwRule
-
-TEST_STATUS = """Status: active
-
-     To                         Action      From
-     --                         ------      ----
-[ 1] 22/tcp                     ALLOW IN    174.24.93.102              # 22/tcp-cosprings.teknofile.net (dynaddrmgr)
-[ 2] 22/tcp                     ALLOW IN    24.48.209.165              # 22/tcp-dynpr.wtforg.net (dynaddrmgr)
-[ 3] 2666/tcp                   ALLOW IN    Anywhere
-[ 4] 5432/tcp                   ALLOW IN    24.48.209.165              # 5432/tcp-dynpr.wtforg.net (dynaddrmgr)
-[ 5] 5432/tcp                   ALLOW IN    174.24.93.102              # 5432/tcp-cosprings.teknofile.net (dynaddrmgr)
-[ 6] 3306/tcp                   ALLOW IN    24.48.209.165              # 3306/tcp-dynpr.wtforg.net (dynaddrmgr)
-[ 7] 33060/tcp                  ALLOW IN    24.48.209.165              # 33060/tcp-dynpr.wtforg.net (dynaddrmgr)
-[ 8] 33060/tcp                  ALLOW IN    174.24.93.102              # 33060/tcp-cosprings.teknofile.net (dynaddrmgr)
-[ 9] 3306/tcp                   ALLOW IN    174.24.93.102              # 3306/tcp-cosprings.teknofile.net (dynaddrmgr)
-[10] 2666/tcp (v6)              ALLOW IN    Anywhere (v6)
-[11] 33060/tcp                  ALLOW IN    2605:ba00:6108:633::/64    # 33060/tcp-dynpr.wtforg.net (dynaddrmgr)
-[12] 3306/tcp                   ALLOW IN    2605:ba00:6108:633::/64    # 3306/tcp-dynpr.wtforg.net (dynaddrmgr)
-[13] 5432/tcp                   ALLOW IN    2605:ba00:6108:633::/64    # 5432/tcp-dynpr.wtforg.net (dynaddrmgr)
-"""  # noqa: E501
 
 UFW = "ufw"
 
@@ -44,11 +27,11 @@ UFW = "ufw"
 class UfwHandler(FirewallHandler):  # noqa: WPS214
     """UFW handler class."""
 
-    regex_port = re.compile(r"(\d+)")
-    regex_proto = re.compile(r"\d+\/([a-z]+)")
+    regex_port_proto = re.compile(r"(\d+)\/([a-z]+)")
+    regex_app = re.compile(r"([ a-zA-Z]+)")
     regex_status = re.compile(r"Status:\s+([a-zA-Z]+)")
-    regex_stat_line = re.compile(
-        r"\[([ 0-9]+)\]\s+([/0-9tcpud]+)\s+ALLOW IN\s+([.:/a-f0-9]+)\s+#(.*)$",
+    regex_app_line = re.compile(
+        r"\[\s*([0-9]+)\]\s+([ /0-9a-zA-Z()]+)\s+ALLOW IN\s+([.:/a-f0-9]+)\s+#(.*)$",
     )
 
     status: str
@@ -83,14 +66,30 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
             delete=False,
         )
         self.before = before_file.name
-        if self.test:
-            status = TEST_STATUS
-        else:
-            cmd_result = self._run_command((UFW, "status", "numbered"), always=True)
-            status = cmd_result.stdout
+        status = self._get_status(before_file.name)
         before_file.write(status)
         before_file.close()
         return self._parse_status(status)
+
+    def _get_status(self, filename: str) -> str:
+        """Get current status."""
+        if self.test:
+            td = Path(TEST_DIR)
+            if td.is_dir():
+                return self._get_test_status(td, filename)
+        cmd_result = self._run_command((UFW, "status", "numbered"), always=True)
+        return cmd_result.stdout
+
+    def _get_test_status(self, td: Path, filename: str) -> str:
+        """Read status from a test file."""
+        if "pytest" in sys.modules:
+            if filename.endswith(".before"):
+                tfn = Path(td / "ufw.status.before")
+            elif filename.endswith(".after"):
+                tfn = Path(td / "ufw.status.after")
+        else:
+            tfn = Path(td / "ufw.status")
+        return tfn.read_text()
 
     def _exec_cleanup(self) -> int:
         """Cleanup after execute."""
@@ -100,11 +99,7 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
             delete=False,
         )
         self.after = after_file.name
-        if self.test:
-            status = TEST_STATUS
-        else:
-            cmd_result = self._run_command((UFW, "status", "numbered"), always=True)
-            status = cmd_result.stdout
+        status = self._get_status(after_file.name)
         after_file.write(status)
         after_file.close()
         cmd_args = ("diff", "-uN", self.before, self.after)
@@ -138,9 +133,9 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
             )
         self.status = status
 
-    def _parse_status(self, ufwstatus: str) -> int:  # noqa: WPS231 C901
+    def _parse_status(self, ufw_status: str) -> int:  # noqa: WPS231 C901
         """Parse ufw status output."""
-        for line in ufwstatus.splitlines():
+        for line in ufw_status.splitlines():
             line = line.strip()
             if not line:
                 continue
@@ -151,7 +146,7 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
                 continue
             if "(dynaddrmgr)" not in line:  # we only care about our rules
                 continue
-            mm = re.match(self.regex_stat_line, line)
+            mm = re.match(self.regex_app_line, line)
             if not mm:
                 continue
             port, protocol = self._parse_port_protocol(mm.group(2).strip())
@@ -176,14 +171,18 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
         """
         port = ""
         proto = ""
-        match = re.match(self.regex_port, field)
-        if match:
-            port = match.group(1)
-            match = re.match(self.regex_proto, field)
-            if match:
-                proto = match.group(1)
-                if not re.match("tcp|udp$", proto):
-                    raise ValueError("Invalid protocol: {0}".format(proto))
+        mm = re.match(self.regex_port_proto, field)
+        if mm:
+            port = mm.group(1)
+            proto = mm.group(2)
+            if not re.match("tcp|udp$", proto):
+                raise ValueError("Invalid protocol: {0}".format(proto))
+        else:
+            field = field.replace("(v6)", "").strip()
+            mm = re.match(self.regex_app, field)
+            if mm:
+                port = mm.group(1)
+                proto = "app"
         return (port, proto)
 
     def _delete_unmatched_rules(self) -> int:

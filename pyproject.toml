@@ -3,7 +3,7 @@ name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
 license = "MIT"
 keywords = []
-version = "0.8.0-dev0"
+version = "0.8.0"
 dynamic = ["classifiers"]
 readme = "README.md"
 authors = [{name = "Quien Sabe", email = "qs5779@mail.com"}]
@@ -15,6 +15,7 @@ dependencies = [
   'jinja2 (>=3.1.2,<4.0.0)',
   'dnspython (>=2.4.2,<3.0.0)',
   'loguru (>=0.7.2,<0.8.0)',
+  "dailylog-lib (>=0.2.2,<0.3.0)",
 ]
 
 [project.urls]
