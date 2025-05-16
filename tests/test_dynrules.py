@@ -5,7 +5,6 @@ from pathlib import Path
 import testfixtures
 from click.testing import CliRunner
 from pyfakefs.fake_filesystem import FakeFilesystem
-from pytest_subprocess.fake_process import FakeProcess
 
 from dynaddrmgr import dynrules
 from dynaddrmgr.constants import AFTER, BEFORE, VERSION
@@ -43,13 +42,7 @@ def test_dynrules_help(runner: CliRunner) -> None:
     testfixtures.compare(HELPTXT, test_result.output)
 
 
-def callback_function(process) -> None:
-    process.returncode = 0
-    with open(TD / "ufw.status", "r") as fd:
-        process.stdout = fd.read()
-
-
-def test_rules(runner: CliRunner, fs: FakeFilesystem, fp: FakeProcess) -> None:
+def test_rules(runner: CliRunner, fs: FakeFilesystem) -> None:
     """Test rule output."""
     cfg_fn = "{0}/dynaddrmgr.yaml".format(Path(BEFORE).parent)
     fs.add_real_file(TD / "resolv.conf", target_path="/etc/resolv.conf")
@@ -57,7 +50,6 @@ def test_rules(runner: CliRunner, fs: FakeFilesystem, fp: FakeProcess) -> None:
     fs.add_real_file(TD / "dynaddrmgr.dns", target_path=cfg_fn)
     fs.add_real_file(TD / "ufw.status.before", target_path=BEFORE)
     fs.add_real_file(TD / "ufw.status.after", target_path=AFTER)
-    fp.register(["ufw", "status", "numbered"], callback=callback_function)
     test_result = runner.invoke(dynrules.main, ["-d", "-t", "-c", cfg_fn, "--noop"])
     assert not test_result.exception
     assert test_result.exit_code == 0
