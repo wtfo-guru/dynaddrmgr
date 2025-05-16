@@ -35,10 +35,12 @@ class TrialData:  # noqa: WPS214
 
     def setup(self, ffs: FakeFilesystem) -> None:
         """Setup testing environment."""
-        resolved_contents = "nameserver 8.8.4.4\nnamserver 8.8.8.8\n"
         resolv_conf = "/etc/resolv.conf"
-        ffs.create_file(resolv_conf, contents=resolved_contents)
+        etc_hosts = "/etc/hosts"
+        ffs.add_real_file(self._real_fn("resolv.conf"), target_path=resolv_conf)
+        ffs.add_real_file(self._real_fn("etc.hosts"), target_path=etc_hosts)
         raise_filenotfound_if(resolv_conf)
+        raise_filenotfound_if(etc_hosts)
 
     def add_real_files(self, ffs: FakeFilesystem, base_fns: List[str]) -> Path:
         """Prepare data for a test run.
