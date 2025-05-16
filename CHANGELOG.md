@@ -8,10 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2025-05-16
+
+### Added
+
+- addition tests for fw rules
+
 ### Fixed
 
 - docs conf.py, poetry >2.0 compatibility
 - shpinx build errors
+- issue with not deleting an app rule
+- use fake etc hosts for template tests
+- correctly check CI for all std pipelines
 
 ## [0.7.1] - 2025-02-17
 
