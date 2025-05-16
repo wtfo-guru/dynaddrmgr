@@ -183,7 +183,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         if self.test:
             c_res = FakedProcessResult(SAMPLE_TEST_DATA)
         else:
-            c_res = self._run_command(("tailscale", "status"), check=True)
+            c_res = self._run_command(("tailscale", "status"), check=False)
             if self.debug:
                 logger.debug(c_res)
 
@@ -201,6 +201,9 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         if not line:
             return False  # empty line
         if line.startswith("#"):
+            logger.warning(line)
+            return False
+        if line.find("Logged out.") > -1:
             logger.warning(line)
             return False
         parts = line.split(None, 2)

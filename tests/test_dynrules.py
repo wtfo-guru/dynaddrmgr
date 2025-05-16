@@ -1,10 +1,13 @@
 """Test level module for dynaddrmgr."""
 
+from pathlib import Path
+
 import testfixtures
 from click.testing import CliRunner
+from pyfakefs.fake_filesystem import FakeFilesystem
 
 from dynaddrmgr import dynrules
-from dynaddrmgr.constants import VERSION
+from dynaddrmgr.constants import AFTER, BEFORE, VERSION
 
 HELPTXT = """Usage: main [OPTIONS]
 
@@ -20,24 +23,7 @@ Options:
   -h, --help                    Show this message and exit.
 """
 
-TSTATUS = """Status: active
-
-     To                         Action      From
-     --                         ------      ----
-[ 1] 22/tcp                     ALLOW IN    174.24.93.102              # 22/tcp cosprings.teknofile.net
-[ 2] 22/tcp                     ALLOW IN    24.48.209.165              # 22/tcp dynpr.wtforg.net
-[ 3] 2666/tcp                   ALLOW IN    Anywhere
-[ 4] 5432/tcp                   ALLOW IN    24.48.209.165              # 5432/tcp dynpr.wtforg.net
-[ 5] 5432/tcp                   ALLOW IN    174.24.93.102              # 5432/tcp cosprings.teknofile.net
-[ 6] 3306/tcp                   ALLOW IN    24.48.209.165              # 3306/tcp dynpr.wtforg.net
-[ 7] 33060/tcp                  ALLOW IN    24.48.209.165              # 33060/tcp dynpr.wtforg.net
-[ 8] 33060/tcp                  ALLOW IN    174.24.93.102              # 33060/tcp cosprings.teknofile.net
-[ 9] 3306/tcp                   ALLOW IN    174.24.93.102              # 3306/tcp cosprings.teknofile.net
-[10] 2666/tcp (v6)              ALLOW IN    Anywhere (v6)
-[11] 33060/tcp                  ALLOW IN    2605:ba00:6108:633::/64    # 33060/tcp dynpr.wtforg.net
-[12] 3306/tcp                   ALLOW IN    2605:ba00:6108:633::/64    # 3306/tcp dynpr.wtforg.net
-[13] 5432/tcp                   ALLOW IN    2605:ba00:6108:633::/64    # 5432/tcp dynpr.wtforg.net
-"""  # noqa: E501
+TD = Path(__file__).parent.resolve() / "data"
 
 
 def test_dynrules_version(runner: CliRunner) -> None:
@@ -54,3 +40,16 @@ def test_dynrules_help(runner: CliRunner) -> None:
     assert test_result.exit_code == 0
     assert not test_result.exception
     testfixtures.compare(HELPTXT, test_result.output)
+
+
+def test_rules(runner: CliRunner, fs: FakeFilesystem) -> None:
+    """Test rule output."""
+    cfg_fn = "{0}/dynaddrmgr.yaml".format(Path(BEFORE).parent)
+    fs.add_real_file(TD / "resolv.conf", target_path="/etc/resolv.conf")
+    fs.add_real_file(TD / "etc.hosts", target_path="/etc/hosts")
+    fs.add_real_file(TD / "dynaddrmgr.dns", target_path=cfg_fn)
+    fs.add_real_file(TD / "ufw.status.before", target_path=BEFORE)
+    fs.add_real_file(TD / "ufw.status.after", target_path=AFTER)
+    test_result = runner.invoke(dynrules.main, ["-d", "-t", "-c", cfg_fn, "--noop"])
+    assert not test_result.exception
+    assert test_result.exit_code == 0

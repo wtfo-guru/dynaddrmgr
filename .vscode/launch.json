@@ -2,24 +2,55 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Module dynrules",
+      "name": "Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "dynrules-app",
       "type": "debugpy",
       "request": "launch",
       "module": "dynaddrmgr.dynrules",
       "justMyCode": false,
       "sudo": true,
       "console": "integratedTerminal",
-      "args": ["--noop", "-c", "/data/jim/development/python/packages/dynaddrmgr/tests/data/dynaddrmgr.yaml"]
+      "args": [
+        "--noop",
+        "-t",
+        "-d",
+        "-c",
+        "/data/jim/development/python/packages/dynaddrmgr/tests/data/dynaddrmgr.dns"
+      ]
     },
     {
-      "name": "Python: Module dyntmpls",
+      "name": "dynrules",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "dynaddrmgr.dynrules",
+      "justMyCode": false,
+      "sudo": true,
+      "console": "integratedTerminal",
+      "args": [
+        "--noop",
+        "-c",
+        "/data/jim/development/python/packages/dynaddrmgr/tests/data/dynaddrmgr.yaml"
+      ]
+    },
+    {
+      "name": "dyntmpls",
       "type": "debugpy",
       "request": "launch",
       "module": "dynaddrmgr.dyntmpls",
       "justMyCode": false,
       "sudo": true,
       "console": "integratedTerminal",
-      "args": ["--debug", "-c", "/data/jim/development/python/packages/dynaddrmgr/tests/data/dynaddrmgr.yaml"]
+      "args": [
+        "--debug",
+        "-c",
+        "/data/jim/development/python/packages/dynaddrmgr/tests/data/dynaddrmgr.yaml"
+      ]
     }
   ]
 }

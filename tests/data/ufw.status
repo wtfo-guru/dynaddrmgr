@@ -1,0 +1,17 @@
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 22/tcp                     ALLOW IN    174.24.93.102              # 22/tcp cosprings.teknofile.net
+[ 2] 22/tcp                     ALLOW IN    24.48.209.165              # 22/tcp dynpr.wtforg.net
+[ 3] 2666/tcp                   ALLOW IN    Anywhere
+[ 4] 5432/tcp                   ALLOW IN    24.48.209.165              # 5432/tcp dynpr.wtforg.net
+[ 5] 5432/tcp                   ALLOW IN    174.24.93.102              # 5432/tcp cosprings.teknofile.net
+[ 6] 3306/tcp                   ALLOW IN    24.48.209.165              # 3306/tcp dynpr.wtforg.net
+[ 7] 33060/tcp                  ALLOW IN    24.48.209.165              # 33060/tcp dynpr.wtforg.net
+[ 8] 33060/tcp                  ALLOW IN    174.24.93.102              # 33060/tcp cosprings.teknofile.net
+[ 9] 3306/tcp                   ALLOW IN    174.24.93.102              # 3306/tcp cosprings.teknofile.net
+[10] 2666/tcp (v6)              ALLOW IN    Anywhere (v6)
+[11] 33060/tcp                  ALLOW IN    2605:ba00:6108:633::/64    # 33060/tcp dynpr.wtforg.net
+[12] 3306/tcp                   ALLOW IN    2605:ba00:6108:633::/64    # 3306/tcp dynpr.wtforg.net
+[13] 5432/tcp                   ALLOW IN    2605:ba00:6108:633::/64    # 5432/tcp dynpr.wtforg.net

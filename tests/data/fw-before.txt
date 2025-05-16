@@ -1,0 +1,10 @@
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 22/tcp                     ALLOW IN    192.168.66.0/24
+[ 2] DNS                        ALLOW IN    192.168.66.0/24
+[ 3] DNS (v6)                   ALLOW IN    2605:ba00:6208:681::/64  # DNS/app-dynpr.wtforg.net (dynaddrmgr)
+[ 4] DNS (v6)                   ALLOW IN    2605:ba00:6208:4c2::/64  # DNS/app-dynpr.wtforg.net (dynaddrmgr)
+[ 5] 22/tcp                     ALLOW IN    2605:ba00:6208:2d55::/64   # 22/tcp-dynpr.wtforg.net (dynaddrmgr)
+[ 5] DNS (v6)                   ALLOW IN    2605:ba00:6208:2d55::/64   # DNS/app-dynpr.wtforg.net (dynaddrmgr)
