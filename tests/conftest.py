@@ -9,7 +9,7 @@ from click.testing import CliRunner
 from jinja2 import Template
 from pyfakefs.fake_filesystem import FakeFilesystem
 from wtforglib.errors import raise_filenotfound_if
-from wtforglib.functions import unix_basename
+from wtforglib.functions import strtobool, unix_basename
 
 os.environ["DYN_ADDR_MGR_ENV"] = "test"
 
@@ -27,21 +27,15 @@ class TrialData:  # noqa: WPS214
         self._real_data_dir = Path(__file__).parent.resolve() / "data"
         self._fake_test_dir = Path("/test_data")
         self._fake_backup_dir = self._fake_test_dir / "backup"
-        self._gl_pipeline = os.getenv("GL_PIPELINE_FLAG", "NO")
+        self._is_ci = os.getenv("CI", "false")
 
-    def gl_pipeline(self) -> bool:
+    def is_ci(self) -> bool:
         """Return True if running in a gitlab pipeline."""
-        return self._gl_pipeline == "YES"
+        return strtobool(self._is_ci)
 
     def setup(self, ffs: FakeFilesystem) -> None:
-        """Return the real path of a test data file."""
-        if self._gl_pipeline == "YES":
-            resolved_contents = "nameserver 8.8.4.4"
-        else:
-            resolved_contents = """nameserver 127.0.0.53
-options edns0 trust-ad
-search metaorg.com wtforg.net tail62ad0.ts.net
-"""
+        """Setup testing environment."""
+        resolved_contents = "nameserver 8.8.4.4\nnamserver 8.8.8.8\n"
         resolv_conf = "/etc/resolv.conf"
         ffs.create_file(resolv_conf, contents=resolved_contents)
         raise_filenotfound_if(resolv_conf)
