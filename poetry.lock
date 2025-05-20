@@ -1913,4 +1913,4 @@ types-pyyaml = ">=6.0.12,<7.0.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "88d5eeb0e4fef911c786d7e670255efb00af6aff887a72d148df018f7e64f1f6"
+content-hash = "2320bccf6fd2a70409b0ada6658c5dac241a53d673301ddb5609787b87a4a795"
