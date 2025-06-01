@@ -44,7 +44,7 @@ requires-poetry = '>=2.0'
 optional = true
 
 [tool.poetry.group.test.dependencies]
-mypy = "^1.0.0"
+mypy = "^1.16.0"
 wemake-python-styleguide = "^1.0"
 doc8 = "^1.0"
 nitpick = "^0.35"
