@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - docs conf.py, poetry >2.0 compatibility
-- shpinx build errors
+- sphinx build errors
 - issue with not deleting an app rule
 - use fake etc hosts for template tests
 - correctly check CI for all std pipelines

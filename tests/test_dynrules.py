@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-import testfixtures
+import testfixtures  # type: ignore[import-untyped]
 from click.testing import CliRunner
 from pyfakefs.fake_filesystem import FakeFilesystem
 

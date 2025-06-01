@@ -13,7 +13,7 @@ from ipaddress import ip_network
 from typing import List, Tuple, Union
 
 from dns.exception import DNSException
-from nslookup import DNSresponse, Nslookup
+from nslookup import DNSresponse, Nslookup  # type: ignore[import-untyped]
 from wtforglib.ipaddress_foos import ipv6_to_netprefix, is_ipv6_address
 from wtforglib.kinds import StrAnyDict
 from wtforglib.options import SimpleScribe
