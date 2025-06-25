@@ -6,7 +6,6 @@ Classes:
 """
 
 import tempfile
-from logging import Logger
 from pathlib import Path
 from typing import List, NoReturn
 
@@ -24,16 +23,11 @@ class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
     This class is responsible for handling common firewall actions.
     """
 
-    logger: Logger
-    debug: bool
-    noop: bool
-    test: bool
-    verbose: bool
     dynamic_hosts: List[DynamicHost]
     before_rules: List[FwRule]
     new_rules: List[FwRule]
 
-    def __init__(self, config: StrAnyDict, **kwargs) -> None:
+    def __init__(self, config: StrAnyDict, **kwargs: bool) -> None:
         """Initialize FirewallHandler.
 
         Parameters

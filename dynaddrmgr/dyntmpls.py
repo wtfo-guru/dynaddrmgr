@@ -19,7 +19,6 @@ import sys
 import types
 
 import click
-from loguru import logger
 from wtforglib.supers import requires_super_user
 
 from dynaddrmgr.constants import VERSION
@@ -72,27 +71,20 @@ def main(  # noqa: WPS216, C901
     """Main function for dynamic template manager."""
     if not test:
         requires_super_user("When --no-test  dynaddrmgr")
-    if not debug:
-        level = "INFO"
-        if not verbose:
-            level = "WARNING"
-        logger.remove(0)
-        logger.add(sys.stderr, level=level)
     app = TemplateManager(
         load_config_file(config, "dynaddrmgr", debug),
         debug=debug,
         noop=noop,
         test=test,
         verbose=verbose,
-        logger=logger,
     )
     try:
         rtn_val = app.manage_templates()
     except Exception as ex:
         rtn_val = 1
         if test:
-            logger.error(str(ex))
-        app.daily.log_message("dyntmpls_main_ex", str(ex))
+            app.logger.error(str(ex))
+        app.logger.log_message("dyntmpls_main_ex", str(ex))
         sys.exit(rtn_val)
     return rtn_val
 

@@ -3,7 +3,7 @@ name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
 license = "MIT"
 keywords = []
-version = "0.8.1"
+version = "0.8.2"
 dynamic = ["classifiers"]
 readme = "README.md"
 authors = [{name = "Quien Sabe", email = "qs5779@mail.com"}]
@@ -14,7 +14,6 @@ dependencies = [
   'wtforglib (>=1.2.1)',
   'jinja2 (>=3.1.2,<4.0.0)',
   'dnspython (>=2.4.2,<3.0.0)',
-  'loguru (>=0.7.2,<0.8.0)',
   "dailylog-lib (>=0.2.2,<0.3.0)",
 ]
 
@@ -47,7 +46,6 @@ optional = true
 mypy = "^1.0.0"
 wemake-python-styleguide = "^1.0"
 doc8 = "^1.0"
-nitpick = "^0.35"
 pytest = ">=7.4,<9.0"
 pytest-cov = "^6.0.0"
 pytest-randomly = "^3.12"

@@ -16,9 +16,7 @@ from dns.exception import DNSException
 from nslookup import DNSresponse, Nslookup  # type: ignore[import-untyped]
 from wtforglib.ipaddress_foos import ipv6_to_netprefix, is_ipv6_address
 from wtforglib.kinds import StrAnyDict
-from wtforglib.options import SimpleScribe
 
-from dynaddrmgr.kinds import LoggingClass
 from dynaddrmgr.singles import DailyLogger
 
 APPNM = "dynaddrmgr"
@@ -47,6 +45,16 @@ class FakedProcessResult:
         self.stderr = stderr
         self.returncode = returncode
 
+    def __repr__(self) -> str:
+        args = [
+            "returncode={!r}".format(self.returncode),
+        ]
+        if self.stdout is not None:
+            args.append("stdout={!r}".format(self.stdout))
+        if self.stderr is not None:
+            args.append("stderr={!r}".format(self.stderr))
+        return "{}({})".format(type(self).__name__, ", ".join(args))
+
 
 WtfProcessResult = Union[subprocess.CompletedProcess[str], FakedProcessResult]
 
@@ -59,12 +67,11 @@ class DynAddrMgr:  # noqa: WPS230
     test: bool
     verbose: bool
     dns: Nslookup
-    logger: LoggingClass
-    daily: DailyLogger
+    logger: DailyLogger
 
     _noop: bool
 
-    def __init__(self, config: StrAnyDict, **kwargs):  # noqa: WPS210
+    def __init__(self, config: StrAnyDict, **kwargs: bool):  # noqa: WPS210
         """Initialize DynAddrMgr application object.
 
         Parameters
@@ -78,7 +85,6 @@ class DynAddrMgr:  # noqa: WPS230
         noop : bool
         test : bool
         verbose : bool
-        logger : LoggingClass
         """
         self.dns = Nslookup()
         self.config = config
@@ -86,14 +92,19 @@ class DynAddrMgr:  # noqa: WPS230
         self._noop = kwargs.get("noop", False)
         self.test = kwargs.get("test", False)
         self.verbose = kwargs.get("verbose", False)
-        self.logger = kwargs.get("logger", SimpleScribe())
-        self.daily = DailyLogger()
+        if self.debug:
+            log_level = "DEBUG"
+        elif self.verbose:
+            log_level = "INFO"
+        else:
+            log_level = "WARNING"
+        self.logger = DailyLogger(level=log_level)
 
     def _to_net(
         self,
         prefix_len: int,
         ips: List[str],
-        ipv6net_style="standard",
+        ipv6net_style: str = "standard",
         ipv4net: bool = False,
     ) -> Tuple[str, ...]:
         """Return a tuple of ip source where ip addresses are converted to networks.
@@ -235,7 +246,7 @@ class DynAddrMgr:  # noqa: WPS230
     def _run_command(
         self,
         args: Tuple[str, ...],
-        **kwargs,
+        **kwargs: bool,
     ) -> WtfProcessResult:
         """Runs commands specified by args."""
         always = kwargs.get("always", False)
