@@ -21,7 +21,6 @@ import types
 from datetime import datetime
 
 import click
-from loguru import logger
 from wtforglib.supers import requires_super_user
 
 from dynaddrmgr.constants import VERSION
@@ -76,12 +75,6 @@ def main(  # noqa: WPS216, C901
         requires_super_user("When --no-test  dynaddrmgr")
     cfg = load_config_file(config, "dynaddrmgr", debug)
     fwtype = cfg.get("firewall_handler", "unspecified").lower()
-    if not debug:
-        level = "INFO"
-        if not verbose:
-            level = "WARNING"
-        logger.remove(0)
-        logger.add(sys.stderr, level=level)
     try:
         if fwtype == "ufw":
             app = UfwHandler(
@@ -90,7 +83,6 @@ def main(  # noqa: WPS216, C901
                 noop=noop,
                 test=test,
                 verbose=verbose,
-                logger=logger,
             )
         else:
             raise ValueError("firewall {0} is not supported".format(fwtype))

@@ -8,7 +8,6 @@ Classes:
 from ipaddress import IPv4Address
 from typing import Dict, List, Optional, Tuple, Union
 
-from loguru import logger
 from wtforglib.kinds import StrAnyDict, StrStrDict
 from wtforglib.options import basic_options
 from wtforglib.tmplwrtr import TemplateWriter
@@ -43,7 +42,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
     in the configuration file.
     """
 
-    def __init__(self, config: StrAnyDict, **kwargs):
+    def __init__(self, config: StrAnyDict, **kwargs: bool):
         """Constructor for TemplateManager class."""
         super().__init__(config, **kwargs)
         opts = basic_options(self.debug, self.test, self.verbose)
@@ -185,7 +184,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         else:
             c_res = self._run_command(("tailscale", "status"), check=False)
             if self.debug:
-                logger.debug(c_res)
+                self.logger.debug(str(c_res))
 
         status = c_res.stdout.splitlines()
 
@@ -201,14 +200,14 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         if not line:
             return False  # empty line
         if line.startswith("#"):
-            logger.warning(line)
+            self.logger.warning(line)
             return False
         if line.find("Logged out.") > -1:
-            logger.warning(line)
+            self.logger.log_message("ts-logged-out", line)
             return False
         parts = line.split(None, 2)
         if self.debug:
-            logger.debug(parts)
+            self.logger.debug(str(parts))
         if len(parts) == 3:
             IPv4Address(parts[0])  # will raise AddressValueError if bad
             ts_info: StrStrDict = {}
@@ -217,6 +216,6 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
             ts_info["status"] = parts[2]
             ts_status.append(ts_info)
         else:
-            logger.error("Failed to parse line: {0}".format(line))
+            self.logger.error("Failed to parse line: {0}".format(line))
             return False
         return True

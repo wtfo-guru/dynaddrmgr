@@ -152,14 +152,14 @@ class FwRule:
             raise ValueError("Invalid ip source: {0}".format(ipaddr))
         return source
 
-    def _ip_address(self, ipaddr) -> Optional[IPSource]:
+    def _ip_address(self, ipaddr: str) -> Optional[IPSource]:
         try:
             source = ip_address(ipaddr)
         except ValueError:
             return None
         return source
 
-    def _ip_network(self, ipaddr) -> Optional[IPSource]:
+    def _ip_network(self, ipaddr: str) -> Optional[IPSource]:
         try:
             source = ip_network(ipaddr)
         except ValueError:

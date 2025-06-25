@@ -38,7 +38,7 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
     before: str
     after: str
 
-    def __init__(self, config: StrAnyDict, **kwargs) -> None:
+    def __init__(self, config: StrAnyDict, **kwargs: bool) -> None:
         """Initialize FirewallHandler.
 
         Parameters
@@ -195,8 +195,7 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
                     indices.append(rule.index)
                 else:
                     self.logger.error(
-                        "Skipping rule %s because index is less than one.",  # noqa: WPS323 E501
-                        rule,
+                        "Skipping rule {0} because index is < 1.".format(rule),
                     )
         for idx in sorted(indices, key=int, reverse=True):
             cmd_result = self._run_command((UFW, "--force", "delete", str(idx)))
