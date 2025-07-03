@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- 2025-07-03 updated Makefile, no dep nitpick
+
 ## [0.8.2] - 2025-06-25
 
 ### Changed
