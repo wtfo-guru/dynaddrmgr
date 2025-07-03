@@ -37,6 +37,18 @@ ifneq ($(PROJECT_VERSION), $(CONST_VERSION))
 endif
 	@echo "Versions are equal $(PROJECT_VERSION), $(BUMP_VERSION), $(CONST_VERSION)"
 
+.PHONY: changelog-check
+changelog-check:
+ifneq (,$(findstring dev,$(PROJECT_VERSION)))
+	$(error Cannot pull request when dev version)
+else ifeq (,$(shell grep $(PROJECT_VERSION) CHANGELOG.md))
+	$(error No changelog entry for $(PROJECT_VERSION))
+else ifneq (,$(shell grep Unreleased CHANGELOG.md))
+	$(error Unreleased section in CHANGELOG.md)
+else
+	@echo "Changelog entry found for $(PROJECT_VERSION)"
+endif
+
 .PHONY: black
 black:
 	poetry run isort $(PACKAGE_DIR) $(TEST_MASK)
@@ -89,7 +101,7 @@ test: nitpick lint package unit
 citest: lint package unit
 
 .PHONY: build
-build: version-sanity safety clean-build test
+build: version-sanity changelog-check safety clean-build test
 	poetry build
 ifdef SYNCH_WHEELS
 	sync-wheels.sh dist/$(PROJECT_NAME)-$(WHEEL_VERSION)-py3-none-any.whl $(WHEELS)
