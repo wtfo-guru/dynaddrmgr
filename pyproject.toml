@@ -1,9 +1,8 @@
 [project]
 name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
-license = "MIT"
 keywords = []
-version = "0.8.2"
+version = "0.8.3-dev0"
 dynamic = ["classifiers"]
 readme = "README.md"
 authors = [{name = "Quien Sabe", email = "qs5779@mail.com"}]
@@ -47,8 +46,8 @@ mypy = "^1.0.0"
 wemake-python-styleguide = "^1.0"
 doc8 = "^2.0"
 pytest = ">=7.4,<9.0"
-pytest-cov = "^6.0.0"
-pytest-randomly = "^3.12"
+pytest-cov = "^7.0.0"
+pytest-randomly = "^4.0.0"
 testfixtures = ">=7.1,<9.0"
 black = "^25.0"
 isort = "^6.0"
