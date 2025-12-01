@@ -1,6 +1,6 @@
 """Test level module for dynaddrmgr."""
 
-import testfixtures  # type: ignore[import-untyped]
+import testfixtures
 from click.testing import CliRunner
 from pyfakefs.fake_filesystem import FakeFilesystem
 
