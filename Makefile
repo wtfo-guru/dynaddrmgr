@@ -54,8 +54,13 @@ black:
 	poetry run isort $(PACKAGE_DIR) $(TEST_MASK)
 	poetry run black $(PACKAGE_DIR) $(TEST_MASK)
 
+.PHONY: ruff
+ruff: black
+	poetry run ruff format $(PACKAGE_DIR) $(TEST_MASK)
+	poetry run ruff check $(PACKAGE_DIR) $(TEST_MASK)
+
 .PHONY: mypy
-mypy: black
+mypy: ruff
 	poetry run mypy $(PACKAGE_DIR) $(TEST_MASK)
 
 .PHONY: lint
@@ -88,7 +93,7 @@ publish-test: build
 
 .PHONY: safety
 safety:
-	safety scan --full-report
+	safety --proxy-host squid.metaorg.com --proxy-port 3128 --proxy-protocol http scan --full-report
 
 .PHONY: nitpick
 nitpick:
