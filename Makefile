@@ -108,7 +108,7 @@ citest: lint package unit
 .PHONY: build
 build: version-sanity changelog-check safety clean-build test
 	poetry build
-ifdef SYNCH_WHEELS
+ifdef SYNC_WHEELS
 	sync-wheels.sh dist/$(PROJECT_NAME)-$(WHEEL_VERSION)-py3-none-any.whl $(WHEELS)
 endif
 
