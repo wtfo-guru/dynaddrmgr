@@ -61,7 +61,7 @@ ruff = "^0.14.4"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "^8.0"
+sphinx = "^9.0"
 sphinx-autodoc-typehints = "^3.0"
 sphinx_mdinclude = "^0.6.2"
 tomli = "^2.0"
