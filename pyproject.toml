@@ -2,7 +2,7 @@
 name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
 keywords = []
-version = "0.8.3-dev1"
+version = "0.8.3-dev2"
 dynamic = ["classifiers"]
 readme = "README.md"
 license = "MIT"
