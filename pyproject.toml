@@ -64,7 +64,7 @@ optional = true
 sphinx = "^9.0"
 sphinx-autodoc-typehints = "^3.0"
 sphinx_mdinclude = "^0.6.2"
-tomli = "^2.0"
+tomli = "^2.4"
 
 
 [build-system]
