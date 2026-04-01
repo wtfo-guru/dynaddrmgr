@@ -2,7 +2,7 @@
 name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
 keywords = []
-version = "0.8.3-dev3"
+version = "0.8.3-dev5"
 dynamic = ["classifiers"]
 readme = "README.md"
 license = "MIT"
@@ -43,13 +43,13 @@ requires-poetry = '>=2.0'
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.17.0"
+mypy = "^1.0"
 wemake-python-styleguide = "^1.0"
 doc8 = "^2.0"
 pytest = "^9.0"
 pytest-cov = "^7.0"
 pytest-randomly = "^4.0.0"
-testfixtures = "^10.0"
+testfixtures = "^11.0"
 black = "^26.0"
 isort = "^8.0"
 requests-cache = "^1.3.0"
@@ -71,5 +71,8 @@ tomli = "^2.0"
 requires = ["poetry-core>=1.2.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.black]
+target-version = ["py311", "py312", "py313"]
+
 [tool.nitpick]
-style = "https://www.wtfo-guru.com/.well-known/nitpick-wtf-style.toml"
+style = "github://qs5779/devtools/nitpick/nitpick-wtf-style.toml"
