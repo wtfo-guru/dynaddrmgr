@@ -84,6 +84,8 @@ test: nitpick lint package unit
 
 citest: lint package unit
 
+candidate: test
+
 poetry-update:
 	@poetry update --with dev --with docs
 

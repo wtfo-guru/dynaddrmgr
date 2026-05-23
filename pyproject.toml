@@ -2,11 +2,11 @@
 name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
 keywords = []
-version = "0.8.3-dev5"
+version = "0.8.3-dev6"
 dynamic = ["classifiers"]
 readme = "README.md"
 license = "MIT"
-authors = [{name = "Quien Sabe", email = "qs5779@mail.com"}]
+authors = [{name = "Quien Sabe", email = "qs5779@pm.me"}]
 requires-python = '>=3.11,<4.0'
 dependencies = [
   'click (>=8.1.0,<9.0.0)',
