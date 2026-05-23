@@ -54,7 +54,7 @@ black = "^26.0"
 isort = "^8.0"
 requests-cache = "^1.3.0"
 flake8-pytest-style = "^2.0"
-pyfakefs = "^6.0.0"
+pyfakefs = "^6.2.0"
 ruff = "^0.15.0"
 
 [tool.poetry.group.docs]
