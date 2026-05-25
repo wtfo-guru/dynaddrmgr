@@ -8,6 +8,7 @@ Classes:
 from ipaddress import IPv4Address
 from typing import Dict, List, Optional, Tuple, Union
 
+from jinja2 import Environment
 from wtforglib.kinds import StrAnyDict, StrStrDict
 from wtforglib.options import basic_options
 from wtforglib.tmplwrtr import TemplateWriter
@@ -46,7 +47,8 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         """Constructor for TemplateManager class."""
         super().__init__(config, **kwargs)
         opts = basic_options(self.debug, self.test, self.verbose)
-        self.writer = TemplateWriter(opts)
+        jinja_env = Environment(trim_blocks=True)
+        self.writer = TemplateWriter(opts, jinja_env)
 
     def manage_templates(self) -> int:  # noqa: WPS231
         """Manage the templates specified in the configuration file.
