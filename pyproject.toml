@@ -2,7 +2,7 @@
 name = "dynaddrmgr"
 description = "Tools to manage actions based on dynamic host address changes."
 keywords = []
-version = "0.8.3-dev6"
+version = "0.8.3-dev7"
 dynamic = ["classifiers"]
 readme = "README.md"
 license = "MIT"
@@ -44,7 +44,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.0"
-wemake-python-styleguide = "^1.0"
+wemake-python-styleguide = "^1.6"
 doc8 = "^2.0"
 pytest = "^9.0"
 pytest-cov = "^7.0"

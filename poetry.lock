@@ -1763,4 +1763,4 @@ types-pyyaml = ">=6.0.12,<7.0.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<4.0"
-content-hash = "5de38e65eaf131e2630a3e2771a91582d7934afeee4fc91890d983393981767c"
+content-hash = "e91630459dcb865ba6acbf24d6ab2ab7c59a6f9b58ced27783c7b8fbfa034577"
