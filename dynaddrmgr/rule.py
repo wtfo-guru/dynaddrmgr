@@ -15,7 +15,6 @@ Misc variables:
 """
 
 from ipaddress import ip_address, ip_network
-from typing import Optional, Union
 
 from dynaddrmgr.kinds import IPSource
 
@@ -24,7 +23,7 @@ class FwRule:
     """FwRule represents a firewall rule."""
 
     index: int
-    allow: Union[str, int]
+    allow: str | int
     protocol: str
     ipaddr: IPSource
     comment: str
@@ -32,7 +31,7 @@ class FwRule:
 
     def __init__(  # noqa: WPS211
         self,
-        allow: Union[str, int],
+        allow: str | int,
         proto: str,
         ipaddr: str,
         comment: str,
@@ -62,13 +61,9 @@ class FwRule:
         self.ipaddr = self.ip_source(ipaddr)
         if comment.startswith("!!"):
             if proto:
-                comment = "{0}/{1}-{2} (dynaddrmgr)".format(
-                    allow,
-                    proto,
-                    comment[2:],
-                )
+                comment = f"{allow}/{proto}-{comment[2:]} (dynaddrmgr)"
             else:
-                comment = "{0}-{1} (dynaddrmgr)".format(allow, comment[2:])
+                comment = f"{allow}-{comment[2:]} (dynaddrmgr)"
         self.comment = comment
         self.index = int(index)
         self.status = 0
@@ -82,20 +77,13 @@ class FwRule:
             representation of this instance
         """
         if self.protocol:
-            return "[%2s] %5s/%s %-40s # %s [%d]" % (  # noqa: WPS323
-                str(self.index),
-                str(self.allow),
-                self.protocol,
-                str(self.ipaddr),
-                self.comment,
-                self.status,
+            return (
+                f"[{self.index:2d}] {self.allow!s:>5}/{self.protocol} "  # noqa: WPS221
+                f"{self.ipaddr:<40} # {self.comment} [{self.status:d}]"
             )
-        return "[%2s] %5s %-45s # %s [%d]" % (  # noqa: WPS323
-            str(self.index),
-            str(self.allow),
-            str(self.ipaddr),
-            self.comment,
-            self.status,
+        return (
+            f"[{self.index:2d}] {self.allow!s:>5} {self.ipaddr:<45} "  # noqa: WPS221
+            f"# {self.comment} [{self.status:d}]"
         )
 
     def __eq__(self, other: object) -> bool:
@@ -118,7 +106,7 @@ class FwRule:
         """
         if not isinstance(other, FwRule):
             # don't attempt to compare against unrelated types
-            raise ValueError("Can only compare FwRule instances.")
+            raise TypeError("Can only compare FwRule instances.")
         if self.ipaddr != other.ipaddr:
             return False
         if self.allow != other.allow:
@@ -149,17 +137,17 @@ class FwRule:
         if source is None:
             source = self._ip_network(ipaddr)
         if source is None:
-            raise ValueError("Invalid ip source: {0}".format(ipaddr))
+            raise ValueError(f"Invalid ip source: {ipaddr}")
         return source
 
-    def _ip_address(self, ipaddr: str) -> Optional[IPSource]:
+    def _ip_address(self, ipaddr: str) -> IPSource | None:
         try:
             source = ip_address(ipaddr)
         except ValueError:
             return None
         return source
 
-    def _ip_network(self, ipaddr: str) -> Optional[IPSource]:
+    def _ip_network(self, ipaddr: str) -> IPSource | None:
         try:
             source = ip_network(ipaddr)
         except ValueError:

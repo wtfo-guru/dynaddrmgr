@@ -7,7 +7,7 @@ Classes:
 
 import tempfile
 from pathlib import Path
-from typing import List, NoReturn
+from typing import NoReturn
 
 from wtforglib.kinds import StrAnyDict
 
@@ -23,9 +23,9 @@ class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
     This class is responsible for handling common firewall actions.
     """
 
-    dynamic_hosts: List[DynamicHost]
-    before_rules: List[FwRule]
-    new_rules: List[FwRule]
+    dynamic_hosts: list[DynamicHost]
+    before_rules: list[FwRule]
+    new_rules: list[FwRule]
 
     def __init__(self, config: StrAnyDict, **kwargs: bool) -> None:
         """Initialize FirewallHandler.
@@ -50,10 +50,7 @@ class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
     def unhandled(self, action: str) -> NoReturn:
         """Raises NotImplementedError."""
         raise NotImplementedError(
-            "class {0} doesn't handle a file {1}!".format(
-                self.__class__.__name__,
-                action,
-            ),
+            f"class {self.__class__.__name__} doesn't handle a file {action}!",
         )
 
     def manage_rules(self) -> int:
@@ -74,7 +71,7 @@ class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
             raise KeyError("dynamic_hosts_open_ports key is required in configuration")
         return self._exec(dynhosts)
 
-    def _exec(self, dynhosts: List[StrAnyDict]) -> int:
+    def _exec(self, dynhosts: list[StrAnyDict]) -> int:
         """
         Run FirewallHandler.
 
@@ -103,15 +100,13 @@ class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
                 if self.debug:
                     snr = str(nr)
                     sbr = str(br)
-                    self.logger.debug("nr: {0}".format(snr))
-                    self.logger.debug("br: {0}".format(sbr))
+                    self.logger.debug(f"nr: {snr}")
+                    self.logger.debug(f"br: {sbr}")
                 if nr == br:
                     nr.status = 1  # matched
                     br.status = 1  # matched
                     self.logger.debug(
-                        "Skipping rule {0} because it is already in the before list.".format(  # noqa: E501
-                            nr,
-                        ),
+                        f"Skipping rule {nr} because it is already in the before list.",
                     )
                     break
         errors += self._delete_unmatched_rules()
@@ -166,7 +161,7 @@ class FirewallHandler(DynAddrMgr):  # noqa: WPS214 WPS230
         """Cleanup after execute (Abstract Function)."""
         self.unhandled("_exec_cleanup")
 
-    def _validate_hosts(self, dynhosts: List[StrAnyDict]) -> bool:
+    def _validate_hosts(self, dynhosts: list[StrAnyDict]) -> bool:
         """
         Validate configuration.
 

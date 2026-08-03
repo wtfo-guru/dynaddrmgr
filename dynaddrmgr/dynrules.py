@@ -63,7 +63,7 @@ CONTEXT_SETTINGS = types.MappingProxyType({"help_option_names": ["-h", "--help"]
     help="Specify verbose mode, default: False",
 )
 @click.version_option(VERSION)
-def main(  # noqa: WPS216, C901
+def main(  # noqa: WPS216
     config: str,
     debug: bool,
     test: bool,
@@ -85,11 +85,11 @@ def main(  # noqa: WPS216, C901
                 verbose=verbose,
             )
         else:
-            raise ValueError("firewall {0} is not supported".format(fwtype))
+            raise ValueError(f"firewall {fwtype} is not supported")
         rtn_val = app.manage_rules()
-    except Exception as ex:
+    except ValueError as ex:
         rtn_val = 1
-        print("{0} - {1}".format(datetime.now(), ex), file=sys.stderr)
+        print(f"{datetime.now().astimezone()} - {ex}", file=sys.stderr)
         if debug:
             print("-" * 60)
             traceback.print_exc(file=sys.stdout)

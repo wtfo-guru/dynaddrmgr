@@ -28,7 +28,7 @@ def test_dyntmpls_version(runner: CliRunner) -> None:
     test_result = runner.invoke(dyntmpls.main, ["--version"])
     assert not test_result.exception
     assert test_result.exit_code == 0
-    assert test_result.output.strip() == "main, version {0}".format(VERSION)
+    assert test_result.output.strip() == f"main, version {VERSION}"
 
 
 def test_dyntmpls_help(runner: CliRunner) -> None:

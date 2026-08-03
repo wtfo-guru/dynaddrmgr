@@ -2,7 +2,6 @@
 
 import os
 from pathlib import Path
-from typing import List
 
 import pytest
 from click.testing import CliRunner
@@ -42,7 +41,7 @@ class TrialData:  # noqa: WPS214
         raise_filenotfound_if(resolv_conf)
         raise_filenotfound_if(etc_hosts)
 
-    def add_real_files(self, ffs: FakeFilesystem, base_fns: List[str]) -> Path:
+    def add_real_files(self, ffs: FakeFilesystem, base_fns: list[str]) -> Path:
         """Prepare data for a test run.
 
         Parameters
@@ -92,11 +91,11 @@ class TrialData:  # noqa: WPS214
         return str(self._fake_test_dir / base_fn)
 
 
-@pytest.fixture()  # noqa: PT001
+@pytest.fixture()
 def runner() -> CliRunner:
     return CliRunner()
 
 
-@pytest.fixture()  # noqa: PT001
+@pytest.fixture()
 def test_data() -> TrialData:
     return TrialData()

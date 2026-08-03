@@ -5,8 +5,6 @@ Classes:
     DynamicHost
 """
 
-from typing import List, Optional, Tuple, Union
-
 from wtforglib.kinds import StrAnyDict
 
 from dynaddrmgr.rule import FwRule
@@ -24,9 +22,9 @@ EXAMPLES = """
       app:
         - DNS
 """
-PortList = List[int]
-AppList = List[str]
-CfgPortList = List[Union[str, int]]
+PortList = list[int]
+AppList = list[str]
+CfgPortList = list[str | int]
 
 
 class DynamicHost:
@@ -40,7 +38,7 @@ class DynamicHost:
     _ports_tcp: PortList
     _ports_udp: PortList
     _apps: AppList
-    _rules: List[FwRule]
+    _rules: list[FwRule]
     fw_handler: object
 
     def __init__(self, hinfo: StrAnyDict) -> None:
@@ -62,7 +60,7 @@ class DynamicHost:
         self._ports_udp = self._init_udp(ports.get("udp"))
         self._apps = ports.get("app", [])
 
-    def rules(self, ips: Tuple[str, ...]) -> List[FwRule]:  # noqa: C901,WPS210,WPS231
+    def rules(self, ips: tuple[str, ...]) -> list[FwRule]:  # noqa: WPS210, WPS231, C901
         """Get rules for dynamic host.
 
         Parameters
@@ -76,7 +74,7 @@ class DynamicHost:
             List of rules
         """
         if not self._rules:
-            bang_comment = "!!{0}".format(self.name)
+            bang_comment = f"!!{self.name}"
             for ipaddr in ips:
                 for bport in self._ports_both:
                     self._rules.append(FwRule(bport, "", ipaddr, bang_comment))
@@ -88,7 +86,7 @@ class DynamicHost:
                     self._rules.append(FwRule(app, "app", ipaddr, bang_comment))
         return self._rules
 
-    def _init_both(self, ports: Optional[CfgPortList]) -> PortList:
+    def _init_both(self, ports: CfgPortList | None) -> PortList:
         """Initialize both ports list.
 
         Parameters
@@ -107,7 +105,7 @@ class DynamicHost:
                 ports_both.append(int(port))
         return ports_both
 
-    def _init_tcp(self, ports: Optional[CfgPortList]) -> PortList:
+    def _init_tcp(self, ports: CfgPortList | None) -> PortList:
         """Initialize both ports list.
 
         Parameters
@@ -128,7 +126,7 @@ class DynamicHost:
                     ports_tcp.append(iport)
         return ports_tcp
 
-    def _init_udp(self, ports: Optional[CfgPortList]) -> PortList:
+    def _init_udp(self, ports: CfgPortList | None) -> PortList:
         """Initialize both ports list.
 
         Parameters

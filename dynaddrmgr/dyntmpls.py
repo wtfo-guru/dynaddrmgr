@@ -19,6 +19,7 @@ import sys
 import types
 
 import click
+from dns.exception import DNSException
 from wtforglib.supers import requires_super_user
 
 from dynaddrmgr.constants import VERSION
@@ -61,7 +62,7 @@ CONTEXT_SETTINGS = types.MappingProxyType({"help_option_names": ["-h", "--help"]
     help="Specify verbose mode, default: False",
 )
 @click.version_option(VERSION)
-def main(  # noqa: WPS216, C901
+def main(  # noqa: WPS216
     config: str,
     debug: bool,
     test: bool,
@@ -80,7 +81,7 @@ def main(  # noqa: WPS216, C901
     )
     try:
         rtn_val = app.manage_templates()
-    except Exception as ex:
+    except DNSException as ex:
         rtn_val = 1
         if test:
             app.logger.error(str(ex))

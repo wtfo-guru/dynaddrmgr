@@ -6,7 +6,6 @@ Classes:
 """
 
 from ipaddress import IPv4Address
-from typing import Dict, List, Optional, Tuple, Union
 
 from jinja2 import Environment
 from wtforglib.kinds import StrAnyDict, StrStrDict
@@ -15,9 +14,9 @@ from wtforglib.tmplwrtr import TemplateWriter
 
 from dynaddrmgr.app import DynAddrMgr, FakedProcessResult, WtfProcessResult
 
-TailscaleStatus = List[StrStrDict]
+TailscaleStatus = list[StrStrDict]
 
-TmplVar = Dict[str, Union[Tuple[str, ...], StrStrDict]]  # noqa: WPS221
+TmplVar = dict[str, tuple[str, ...] | StrStrDict]  # noqa: WPS221
 
 NAME = "name"
 IP = "ip"
@@ -63,7 +62,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         KeyError
             When dynamic_host_templates not in self.config
         """
-        dyn_host_tmpls: Optional[Dict[str, StrAnyDict]] = self.config.get(
+        dyn_host_tmpls: dict[str, StrAnyDict] | None = self.config.get(
             "dynamic_host_templates",
         )
         if dyn_host_tmpls is None:
@@ -80,11 +79,11 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
             tmpl_var["whitelist"] = self._get_white_list(tmpl_var)
             if self.config.get("tailscale", False):
                 tmpl_var["tailscale_hosts"] = self._capture_parse_tailscale_status()
-            self.logger.debug("tmpl_var: {0}".format(tmpl_var))
+            self.logger.debug(f"tmpl_var: {tmpl_var}")
             errors += self.writer.generate(tmpl_name, tmpl_value, tmpl_var)
         return errors
 
-    def _unique_sorted_list(self, list_param: List[str]) -> Tuple[str, ...]:
+    def _unique_sorted_list(self, list_param: list[str]) -> tuple[str, ...]:
         """Return a sorted unique tuple of strings.
 
         Parameters
@@ -101,7 +100,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         unique_sorted.sort()
         return tuple(unique_sorted)
 
-    def _get_white_list(self, tmpl_var: TmplVar) -> Tuple[str, ...]:
+    def _get_white_list(self, tmpl_var: TmplVar) -> tuple[str, ...]:
         """Return a sorted unique tuple of ip addresses.
 
         Parameters
@@ -114,8 +113,8 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         Tuple[str, ...]
             Unique tuple of ip addresses
         """
-        addresses: List[str] = self.config.get("global_whites", [])
-        for _key, addrs in tmpl_var.items():
+        addresses: list[str] = self.config.get("global_whites", [])
+        for addrs in tmpl_var.values():
             addresses.extend(addrs)
         return self._unique_sorted_list(addresses)
 
@@ -126,9 +125,9 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         tmpl_var: TmplVar,
     ) -> bool:
         """Lookup ip sources for template hosts."""
-        hosts: List[StrAnyDict] = tmpl_value.get("hosts", {})
+        hosts: list[StrAnyDict] = tmpl_value.get("hosts", {})
         for host in hosts:
-            self.logger.debug("host: {0}".format(host))
+            self.logger.debug(f"host: {host}")
             name = host.get(NAME, "")
             if name:
                 unsorted = self._lookup_host(
@@ -142,7 +141,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
                 tmpl_var[name] = self._unique_sorted_list(list(unsorted))
             else:
                 self.logger.error(
-                    "Template {0} hosts name not specified!!".format(tmpl_name),
+                    f"Template {tmpl_name} hosts name not specified!!",
                 )
                 return False
         return True
@@ -157,7 +156,7 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
             kv = tmpl_value.get(key)
             if kv is None:
                 self.logger.error(
-                    "Template {0} does not have a {1} key!!".format(tmpl_name, key),
+                    f"Template {tmpl_name} does not have a {key} key!!",
                 )
                 return False
         return True
@@ -171,10 +170,10 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
         for ts_info in status:
             for key in (IP, NAME):
                 if key not in ts_info:
-                    raise KeyError("Missing key: {0}".format(key))
+                    raise KeyError(f"Missing key: {key}")
                 valor = ts_info.get(IP, "")
                 if not valor:
-                    raise ValueError("Empty {0}".format(ts_info.get(key)))
+                    raise ValueError(f"Empty {ts_info.get(key)}")
             hosts[ts_info.get(IP, "1.1.1.1")] = ts_info.get(NAME, "dunno")
         return hosts
 
@@ -218,6 +217,6 @@ class TemplateManager(DynAddrMgr):  # noqa: WPS214
             ts_info["status"] = parts[2]
             ts_status.append(ts_info)
         else:
-            self.logger.error("Failed to parse line: {0}".format(line))
+            self.logger.error(f"Failed to parse line: {line}")
             return False
         return True

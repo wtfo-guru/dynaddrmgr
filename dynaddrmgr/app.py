@@ -8,9 +8,8 @@ Misc variables:
     APPNM
 """
 
-import subprocess  # noqa: S404
+import subprocess
 from ipaddress import ip_network
-from typing import List, Tuple, Union
 
 from dns.exception import DNSException
 from nslookup import DNSresponse, Nslookup  # type: ignore[import-untyped]
@@ -47,16 +46,16 @@ class FakedProcessResult:
 
     def __repr__(self) -> str:
         args = [
-            "returncode={!r}".format(self.returncode),
+            f"returncode={self.returncode!r}",
         ]
         if self.stdout is not None:
-            args.append("stdout={!r}".format(self.stdout))
+            args.append(f"stdout={self.stdout!r}")
         if self.stderr is not None:
-            args.append("stderr={!r}".format(self.stderr))
+            args.append(f"stderr={self.stderr!r}")
         return "{}({})".format(type(self).__name__, ", ".join(args))
 
 
-WtfProcessResult = Union[subprocess.CompletedProcess[str], FakedProcessResult]
+WtfProcessResult = subprocess.CompletedProcess[str] | FakedProcessResult
 
 
 class DynAddrMgr:  # noqa: WPS230
@@ -103,10 +102,10 @@ class DynAddrMgr:  # noqa: WPS230
     def _to_net(
         self,
         prefix_len: int,
-        ips: List[str],
+        ips: list[str],
         ipv6net_style: str = "standard",
         ipv4net: bool = False,
-    ) -> Tuple[str, ...]:
+    ) -> tuple[str, ...]:
         """Return a tuple of ip source where ip addresses are converted to networks.
 
         Parameters
@@ -125,7 +124,7 @@ class DynAddrMgr:  # noqa: WPS230
         Tuple[str, ...]
             List of converted addresses
         """
-        converted: List[str] = []
+        converted: list[str] = []
         for ip in ips:
             if is_ipv6_address(ip):
                 converted.append(ipv6_to_netprefix(ip, prefix_len, ipv6net_style))
@@ -138,13 +137,13 @@ class DynAddrMgr:  # noqa: WPS230
     def _verify_lookup_answer(  # noqa: WPS211
         self,
         name: str,
-        answer: List[str],
+        answer: list[str],
         ipv6: bool,
         ipv6net: int = 0,
         minlen: int = 1,
         ipv6net_style: str = "standard",
         ipv4net: bool = False,
-    ) -> Tuple[str, ...]:
+    ) -> tuple[str, ...]:
         """Return a unique list of IP source strings.
 
         Parameters
@@ -186,10 +185,10 @@ class DynAddrMgr:  # noqa: WPS230
                     )
                 return tuple(first_set)
             raise DNSException(  # type: ignore [no-untyped-call]
-                "'{0}' name expected {1} addresses.!!!".format(name, minlen),
+                f"'{name}' name expected {minlen} addresses.!!!",
             )
         raise DNSException(  # type: ignore [no-untyped-call]
-            "'{0}' name not found.!!!".format(name),
+            f"'{name}' name not found.!!!",
         )
 
     def _lookup_host(  # noqa: WPS211
@@ -200,7 +199,7 @@ class DynAddrMgr:  # noqa: WPS230
         ipv6net: int = 0,
         ipv6net_style: str = "standard",
         ipv4net: bool = False,
-    ) -> Tuple[str, ...]:
+    ) -> tuple[str, ...]:
         """Return a unique list of IP source strings.
 
         Parameters
@@ -225,7 +224,7 @@ class DynAddrMgr:  # noqa: WPS230
         """
         ips: DNSresponse
         minlen: int = 1
-        self.logger.debug("ipv6net_style: {0}".format(ipv6net_style))
+        self.logger.debug(f"ipv6net_style: {ipv6net_style}")
         if ipv4 and ipv6:
             ips = self.dns.dns_lookup_all(name)
             minlen = 2
@@ -245,21 +244,21 @@ class DynAddrMgr:  # noqa: WPS230
 
     def _run_command(
         self,
-        args: Tuple[str, ...],
+        args: tuple[str, ...],
         **kwargs: bool,
     ) -> WtfProcessResult:
         """Runs commands specified by args."""
         always = kwargs.get("always", False)
         check = kwargs.get("check", True)
-        cmd_str = "{0}".format(" ".join(args))
+        cmd_str = "{}".format(" ".join(args))
         if not always and self._noop:
-            print("noex: {0}".format(cmd_str))
+            print(f"noex: {cmd_str}")
             return FakedProcessResult()
-        self.logger.debug("ex: {0}".format(cmd_str))
+        self.logger.debug(f"ex: {cmd_str}")
         return subprocess.run(
             args,
             check=check,
-            shell=False,  # noqa: S603
+            shell=False,
             capture_output=True,
             encoding="utf-8",
         )

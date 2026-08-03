@@ -15,6 +15,5 @@ Misc variables:
 """
 
 from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
-from typing import Union
 
-IPSource = Union[IPv4Address, IPv4Network, IPv6Address, IPv6Network]
+IPSource = IPv4Address | IPv4Network | IPv6Address | IPv6Network

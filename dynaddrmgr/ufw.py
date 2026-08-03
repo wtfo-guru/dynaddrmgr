@@ -12,7 +12,6 @@ import re
 import sys
 import tempfile
 from pathlib import Path
-from typing import List, Tuple
 
 from wtforglib.kinds import StrAnyDict
 
@@ -60,15 +59,15 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
 
     def _exec_setup(self) -> int:
         """Setup before execute."""
-        before_file = tempfile.NamedTemporaryFile(
+        with tempfile.NamedTemporaryFile(
             mode="w",
             suffix=".before",
             delete=False,
-        )
-        self.before = before_file.name
-        status = self._get_status(before_file.name)
-        before_file.write(status)
-        before_file.close()
+        ) as before_file:
+            self.before = before_file.name
+            status = self._get_status(before_file.name)
+            before_file.write(status)
+            before_file.close()
         return self._parse_status(status)
 
     def _get_status(self, filename: str) -> str:
@@ -93,26 +92,26 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
 
     def _exec_cleanup(self) -> int:
         """Cleanup after execute."""
-        after_file = tempfile.NamedTemporaryFile(
+        with tempfile.NamedTemporaryFile(
             mode="w",
             suffix=".after",
             delete=False,
-        )
-        self.after = after_file.name
-        status = self._get_status(after_file.name)
-        after_file.write(status)
-        after_file.close()
-        cmd_args = ("diff", "-uN", self.before, self.after)
-        cmd_result = self._run_command(cmd_args, check=False)
-        if cmd_result.returncode > 0:
-            if cmd_result.stdout:
-                print(cmd_result.stdout)
-            if cmd_result.returncode > 1 and cmd_result.stderr:
-                print(cmd_result.stderr)
-        if not self.debug:
-            Path(self.before).unlink()
-            Path(self.after).unlink()
-        return 0 if cmd_result.returncode < 2 else cmd_result.returncode
+        ) as after_file:
+            self.after = after_file.name
+            status = self._get_status(after_file.name)
+            after_file.write(status)
+            after_file.close()
+            cmd_args = ("diff", "-uN", self.before, self.after)
+            cmd_result = self._run_command(cmd_args, check=False)
+            if cmd_result.returncode > 0:
+                if cmd_result.stdout:
+                    print(cmd_result.stdout)
+                if cmd_result.returncode > 1 and cmd_result.stderr:
+                    print(cmd_result.stderr)
+            if not self.debug:
+                Path(self.before).unlink()
+                Path(self.after).unlink()
+            return 0 if cmd_result.returncode < 2 else cmd_result.returncode
 
     def _validate_ufw_status(self, status: str) -> None:
         """Validate UFW status.
@@ -129,7 +128,7 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
         """
         if status != "active":
             raise RuntimeError(
-                "ufw status must be 'active' not '{0}".format(self.status),
+                f"ufw status must be 'active' not '{self.status}",
             )
         self.status = status
 
@@ -159,10 +158,10 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
                     mm.group(1).strip(),
                 ),
             )
-        self.logger.debug("Before rules: {0}".format(len(self.before_rules)))
+        self.logger.debug(f"Before rules: {len(self.before_rules)}")
         return 0
 
-    def _parse_port_protocol(self, field: str) -> Tuple[str, str]:
+    def _parse_port_protocol(self, field: str) -> tuple[str, str]:
         """
         Parse a port/protocol field.
 
@@ -176,7 +175,7 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
             port = mm.group(1)
             proto = mm.group(2)
             if not re.match("tcp|udp$", proto):
-                raise ValueError("Invalid protocol: {0}".format(proto))
+                raise ValueError(f"Invalid protocol: {proto}")
         else:
             field = field.replace("(v6)", "").strip()
             mm = re.match(self.regex_app, field)
@@ -188,14 +187,14 @@ class UfwHandler(FirewallHandler):  # noqa: WPS214
     def _delete_unmatched_rules(self) -> int:
         """Delete unmatched rules."""
         errors = 0
-        indices: List[int] = []
+        indices: list[int] = []
         for rule in self.before_rules:
             if not rule.status:
                 if rule.index > 0:
                     indices.append(rule.index)
                 else:
                     self.logger.error(
-                        "Skipping rule {0} because index is < 1.".format(rule),
+                        f"Skipping rule {rule} because index is < 1.",
                     )
         for idx in sorted(indices, key=int, reverse=True):
             cmd_result = self._run_command((UFW, "--force", "delete", str(idx)))
