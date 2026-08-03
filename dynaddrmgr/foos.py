@@ -15,11 +15,11 @@ from wtforglib.kinds import StrAnyDict
 def load_config_file(config: str, base: str, debug: bool) -> StrAnyDict:
     """Load the configuration file."""
     if not config:
-        config_path = Path.home() / ".config" / "{0}.yaml".format(base)
+        config_path = Path.home() / ".config" / f"{base}.yaml"
         if config_path.is_file():
             config = str(config_path)
         else:
-            config = "/etc/{0}.yaml".format(base)
+            config = f"/etc/{base}.yaml"
     if debug:
-        click.echo("DEBUG: config file => {0}".format(config))
+        click.echo(f"DEBUG: config file => {config}")
     return load_yaml_file(config, missing_ok=False)
