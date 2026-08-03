@@ -78,11 +78,11 @@ class FwRule:
         """
         if self.protocol:
             return (
-                f"[{self.index:2d}] {self.allow!s:>5}/{self.protocol} "
+                f"[{self.index:2d}] {self.allow!s:>5}/{self.protocol} " # noqa: WPS221
                 f"{self.ipaddr:<40} # {self.comment} [{self.status:d}]"
             )
         return (
-            f"[{self.index:2d}] {self.allow!s:>5} {self.ipaddr:<45} "
+            f"[{self.index:2d}] {self.allow!s:>5} {self.ipaddr:<45} "  # noqa: WPS221
             f"# {self.comment} [{self.status:d}]"
         )
 
