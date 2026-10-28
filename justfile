@@ -52,8 +52,11 @@ changelog-check:
     echo "Changelog entry found for {{PROJECT_VERSION}}"
   fi
 
-ruff:
-	@poetry run ruff check --fix {{PACKAGE_DIR}} {{TEST_FILES}}
+black:
+  @poetry run black {{PACKAGE_DIR}} {{TEST_FILES}}
+
+ruff: black
+  @poetry run ruff check --fix {{PACKAGE_DIR}} {{TEST_FILES}}
 
 mypy: ruff
 	@poetry run mypy {{PACKAGE_DIR}}
@@ -69,7 +72,13 @@ unit:
 	@poetry run pytest {{TEST_FILES}}
 
 safety:
-	@safety --proxy-host squid.metaorg.com --proxy-port 3128 --proxy-protocol http scan --full-report
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if head -1 /etc/systemd/resolved.conf.d/local.conf | grep -q roaming ; then
+    safety scan --full-report
+  else
+    safety --proxy-host squid.metaorg.com --proxy-port 3128 --proxy-protocol http scan --full-report
+  fi
 
 nitpick:
 	@nitpick -p . check
